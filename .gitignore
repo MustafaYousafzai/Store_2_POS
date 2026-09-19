@@ -1,0 +1,15 @@
+﻿# Environment Credentials
+.env
+
+# Logs and system dumps
+*.log
+error_log
+
+# IDE & Editor files
+.vscode/
+.idea/
+
+# OS specific files
+Thumbs.db
+Desktop.ini
+.DS_Store

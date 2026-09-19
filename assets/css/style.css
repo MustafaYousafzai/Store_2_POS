@@ -1,0 +1,854 @@
+/* 
+ * One Dollar Shop - SaaS UI Theme (style.css)
+ * Font: Inter (loaded via header)
+ */
+
+:root {
+    --primary: #0f172a;       /* Slate-900 */
+    --primary-light: #1e293b; /* Slate-800 */
+    --accent: #ef4444;        /* Modern Red */
+    --accent-hover: #dc2626;  /* Crimson hover */
+    --bg-main: #f8fafc;       /* Soft Slate gray */
+    --card-border: #f1f5f9;   /* Light Slate border */
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --sidebar-width: 260px;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    min-height: 100vh;
+}
+
+/* Sidebar Styles Overhaul */
+#sidebar {
+    min-width: var(--sidebar-width);
+    max-width: var(--sidebar-width);
+    margin-left: calc(-1 * var(--sidebar-width));
+    background-color: var(--primary) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1050;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+#sidebar .sidebar-header {
+    background-color: #020617; /* Extra deep dark */
+}
+
+#sidebar ul.components {
+    padding: 15px 0;
+}
+
+#sidebar ul li a {
+    color: #94a3b8; /* Cool slate */
+    font-weight: 500;
+    font-size: 0.85rem;
+    padding: 11px 20px;
+    border-radius: 6px;
+    margin: 2px 12px;
+    display: block;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+#sidebar ul li a i {
+    width: 20px;
+}
+
+#sidebar ul li a:hover {
+    color: #fff;
+    background-color: var(--primary-light) !important;
+}
+
+#sidebar ul li.active > a, 
+#sidebar ul li a:focus {
+    color: #fff;
+    background-color: var(--accent) !important;
+}
+
+.bg-secondary-dark {
+    background-color: rgba(255,255,255,0.03);
+}
+
+/* Sidebar Open State */
+#sidebar.open {
+    margin-left: 0 !important;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.3);
+}
+
+/* Sidebar Backdrop on mobile/tablet */
+#sidebarBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(2px);
+    z-index: 1040;
+}
+
+/* Main Content Area */
+#content {
+    width: 100%;
+    min-height: 100vh;
+    margin-left: 0;
+    background-color: var(--bg-main);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 992px) {
+    body.sidebar-open #content {
+        margin-left: var(--sidebar-width);
+        width: calc(100% - var(--sidebar-width));
+    }
+}
+
+.navbar {
+    background: #ffffff !important;
+    border-bottom: 1px solid var(--card-border) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Card Styling - SaaS Elevate */
+.card {
+    background-color: #ffffff;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-bottom: 24px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--card-border);
+    padding: 15px 20px;
+}
+
+/* Global button redesign */
+.btn {
+    border-radius: 6px;
+    font-weight: 550;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--accent-hover) !important;
+    border-color: var(--accent-hover) !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
+}
+
+.btn-outline-secondary {
+    border-color: #cbd5e1;
+    color: #475569;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #f1f5f9;
+    color: #334155;
+    border-color: #94a3b8;
+}
+
+/* Table cleanups */
+.table {
+    font-size: 0.85rem;
+}
+.table th {
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 12px 16px;
+}
+.table td {
+    padding: 14px 16px;
+    color: var(--text-main);
+}
+
+/* POS Screen custom adjustments */
+.pos-container {
+    height: calc(100vh - 85px);
+    overflow: hidden;
+}
+
+.cart-summary {
+    background-color: #ffffff;
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+}
+
+.btn-xs {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.75rem;
+    border-radius: 0.25rem;
+}
+
+.catalog-row {
+    transition: background-color 0.15s ease;
+}
+.catalog-row:hover {
+    background-color: rgba(239, 68, 68, 0.04) !important;
+}
+
+/* Mobile & Small Screen Responsiveness Rules */
+@media (max-width: 991.98px) {
+    #sidebar {
+        margin-left: calc(-1 * var(--sidebar-width));
+        position: fixed;
+        height: 100vh;
+    }
+    
+    #sidebar.open {
+        margin-left: 0;
+    }
+    
+    #content {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+    
+    .pos-container {
+        height: auto;
+        overflow: visible;
+    }
+    
+    .cart-items {
+        max-height: 400px;
+    }
+}
+
+/* Enterprise Responsiveness for 11", 13", 16" Laptop Screens (1280px - 1440px) */
+@media (max-width: 1400px) {
+    .table td, .table th {
+        padding: 0.5rem 0.5rem;
+        font-size: 0.85rem;
+    }
+    .kpi-stat-card {
+        padding: 0.85rem !important;
+    }
+    .kpi-stat-card h2 {
+        font-size: 1.35rem !important;
+    }
+    .main-page-container {
+        padding: 0.6rem !important;
+    }
+    .action-tile-btn {
+        padding: 0.75rem 0.5rem !important;
+    }
+    .action-tile-btn i {
+        font-size: 1.25rem !important;
+    }
+}
+
+/* Dynamic toast configurations */
+.toast {
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
+   ENTERPRISE PRINT STYLESHEET (Thermal Receipts, Barcodes & Reports)
+   ========================================================================== */
+/* On-Screen Receipt Preview Styling (Inside Modals) */
+.receipt-print {
+    display: block;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11px;
+    line-height: 1.35;
+    color: #111827;
+    background: #ffffff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.receipt-print table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.receipt-print .center {
+    text-align: center;
+}
+
+.receipt-print .right {
+    text-align: right;
+}
+
+.receipt-logo {
+    max-width: 105px;
+    max-height: 105px;
+    width: auto;
+    height: auto;
+    margin: 0 auto 5px auto;
+    display: block;
+    object-fit: contain;
+}
+
+.receipt-divider {
+    border-top: 1px dashed #000000;
+    margin: 5px 0;
+    width: 100%;
+    height: 1px;
+    overflow: hidden;
+}
+
+.receipt-divider-double {
+    border-top: 2px solid #000000;
+    margin: 6px 0;
+    width: 100%;
+    height: 2px;
+    overflow: hidden;
+}
+
+@media print {
+    @page {
+        size: 78mm auto;
+        margin: 0mm !important;
+    }
+
+    /* 1. Barcode sticker prints mode */
+    body.printing-barcodes {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    body.printing-barcodes #content,
+    body.printing-barcodes .wrapper,
+    body.printing-barcodes .container-fluid,
+    body.printing-barcodes #thermalDirectPrintArea,
+    body.printing-barcodes .modal,
+    body.printing-barcodes .modal-backdrop {
+        display: none !important;
+    }
+    body.printing-barcodes #barcodePrintArea {
+        display: block !important;
+        background: #fff !important;
+        width: 100% !important;
+    }
+    .barcode-sticker {
+        width: 50mm;
+        height: 25mm;
+        padding: 1.5mm;
+        margin: 0 auto;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        font-size: 8px;
+        line-height: 1.1;
+        box-sizing: border-box;
+        page-break-after: always;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        overflow: hidden;
+    }
+    .barcode-sticker svg {
+        max-width: 100%;
+        height: 10mm !important;
+    }
+
+    /* 2. Standard Business Reports Mode (P&L, Financials) */
+    body.printing-report {
+        width: 100% !important;
+        margin: 5mm auto !important;
+    }
+    body.printing-report #thermalDirectPrintArea {
+        display: none !important;
+    }
+    body.printing-report .wrapper,
+    body.printing-report #content,
+    body.printing-report #pnlReportCard {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    /* 3. Fallback Receipt Printing directly on Main Window */
+    body:not(.printing-barcodes):not(.printing-report) {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        width: 78mm !important;
+        overflow: visible !important;
+    }
+    body:not(.printing-barcodes):not(.printing-report) .wrapper,
+    body:not(.printing-barcodes):not(.printing-report) .toast-container,
+    body:not(.printing-barcodes):not(.printing-report) .modal,
+    body:not(.printing-barcodes):not(.printing-report) .modal-backdrop,
+    body:not(.printing-barcodes):not(.printing-report) #sidebar,
+    body:not(.printing-barcodes):not(.printing-report) .navbar,
+    body:not(.printing-barcodes):not(.printing-report) .btn {
+        display: none !important;
+        height: 0 !important;
+        max-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        border: none !important;
+    }
+    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea {
+        display: block !important;
+        position: static !important;
+        width: 78mm !important;
+        max-width: 78mm !important;
+        margin: 0 auto !important;
+        padding: 4mm 3mm 6mm 3mm !important;
+        box-sizing: border-box !important;
+        font-family: 'Courier New', Courier, monospace !important;
+        font-size: 11px !important;
+        line-height: 1.3 !important;
+        color: #000000 !important;
+        background: #ffffff !important;
+        page-break-inside: avoid !important;
+    }
+    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea * {
+        color: #000000 !important;
+        box-sizing: border-box !important;
+    }
+    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea table {
+        width: 100% !important;
+        font-size: 11px !important;
+        border-collapse: collapse !important;
+    }
+    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea .center {
+        text-align: center !important;
+    }
+    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea .right {
+        text-align: right !important;
+    }
+    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea .receipt-divider {
+        border-top: 1px dashed #000000 !important;
+        margin: 5px 0 !important;
+        width: 100% !important;
+        height: 1px !important;
+    }
+}
+
+/* Quick Navbar Navigation Overhauls */
+.nav-pills .nav-link {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 6px;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+}
+
+.nav-pills .nav-link:not(.active) {
+    color: #475569 !important; /* Slate-600 */
+}
+
+/* Hover micro-interactions */
+.nav-pills .nav-link:not(.active):hover {
+    color: #ef4444 !important; /* Accent Crimson */
+    background-color: #fef2f2 !important; /* Very light Crimson tint */
+    border-color: #fee2e2;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.08), 0 2px 4px -1px rgba(239, 68, 68, 0.04);
+}
+
+/* Active buttons drop shadow */
+.nav-pills .nav-link.active {
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);
+}
+
+/* Dropdown menu animations */
+.nav-pills .dropdown-menu {
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    margin-top: 4px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.nav-pills .dropdown-item {
+    transition: all 0.15s ease;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.nav-pills .dropdown-item:hover {
+    background-color: #f1f5f9;
+    color: #ef4444 !important;
+}
+
+.nav-pills .dropdown-item.active {
+    background-color: #ef4444 !important;
+    color: #fff !important;
+}
+
+/* Floating Autocomplete Search Results dropdown panel */
+.search-results-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 2100;
+}
+
+/* Cart Quantity and Discount input ergonomics */
+.cart-qty-input::-webkit-outer-spin-button,
+.cart-qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.cart-qty-input {
+    -moz-appearance: textfield;
+    appearance: textfield;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+}
+
+/* Amount & Currency Number Input Protection: Disable Spin Buttons & Accidental Wheel Changes */
+input[type=number].no-spin::-webkit-inner-spin-button, 
+input[type=number].no-spin::-webkit-outer-spin-button,
+input[type=number].currency-input::-webkit-inner-spin-button, 
+input[type=number].currency-input::-webkit-outer-spin-button,
+.amount-input::-webkit-inner-spin-button,
+.amount-input::-webkit-outer-spin-button,
+.cart-item-discount-input::-webkit-inner-spin-button,
+.cart-item-discount-input::-webkit-outer-spin-button { 
+    -webkit-appearance: none !important; 
+    margin: 0 !important; 
+}
+input[type=number].no-spin,
+input[type=number].currency-input,
+.amount-input,
+.cart-item-discount-input {
+    -moz-appearance: textfield !important;
+    appearance: textfield !important;
+}
+
+/* Tactile Enterprise Quantity Stepper Component */
+.qty-stepper {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    vertical-align: middle;
+}
+.qty-stepper .btn-qty-step {
+    border: none;
+    background: #f1f5f9;
+    color: #334155;
+    padding: 2px 9px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 30px;
+    user-select: none;
+}
+.qty-stepper .btn-qty-step:hover:not(:disabled) {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+.qty-stepper .btn-qty-step:active:not(:disabled) {
+    background: #cbd5e1;
+    transform: scale(0.96);
+}
+.qty-stepper .btn-qty-step:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    background: #f8fafc;
+}
+.qty-stepper .qty-stepper-input {
+    border: none;
+    text-align: center;
+    width: 44px;
+    height: 30px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #0f172a;
+    padding: 0 2px;
+    background: #ffffff;
+    font-family: monospace;
+}
+.qty-stepper .qty-stepper-input:focus {
+    outline: none;
+    background: #f8fafc;
+}
+
+/* Subtle alert color helpers for cross-browser & BS version compatibility */
+.bg-success-subtle {
+    background-color: #d1e7dd !important;
+    color: #0f5132 !important;
+}
+.bg-danger-subtle {
+    background-color: #f8d7da !important;
+    color: #842029 !important;
+}
+.border-success {
+    border-color: #198754 !important;
+}
+.border-danger {
+    border-color: #dc3545 !important;
+}
+#modalConfirmExchange, #modalConfirmRefund {
+    z-index: 1065 !important;
+}
+
+/* ==========================================================================
+   LAPTOP & COMPACT SCREEN RESPONSIVENESS OVERHAUL (1366x768 / 1280x800)
+   ========================================================================== */
+
+/* Universal Horizontal Quick Navigation Bar - Clean, Zero-Scroll, Dropdown Safe */
+.quick-nav-card {
+    overflow: visible !important;
+    position: relative;
+    z-index: 100 !important;
+}
+.quick-nav-card .card-body {
+    overflow: visible !important;
+}
+.nav-horizontal-quick {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    overflow: visible !important;
+    gap: 6px !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+.nav-horizontal-quick .nav-item {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: inline-block !important;
+}
+.nav-horizontal-quick .nav-link {
+    white-space: nowrap !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    padding: 6px 13px !important;
+    border-radius: 6px !important;
+    color: #334155 !important;
+    background-color: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    transition: all 0.15s ease-in-out;
+    display: inline-flex !important;
+    align-items: center;
+    text-decoration: none !important;
+}
+.nav-horizontal-quick .nav-link:hover {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+.nav-horizontal-quick .nav-link.active {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 2px 5px rgba(239, 68, 68, 0.25) !important;
+}
+.nav-horizontal-quick .nav-link.active i {
+    color: #ffffff !important;
+}
+.nav-horizontal-quick .dropdown-menu {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.15), 0 4px 10px rgba(15, 23, 42, 0.08) !important;
+    padding: 6px !important;
+    min-width: 230px !important;
+    z-index: 1060 !important;
+    position: absolute !important;
+    animation: dropdownFadeIn 0.15s ease-out;
+}
+@keyframes dropdownFadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.nav-horizontal-quick .dropdown-item {
+    border-radius: 6px !important;
+    font-size: 0.84rem !important;
+    font-weight: 500 !important;
+    padding: 8px 12px !important;
+    color: #334155 !important;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+}
+.nav-horizontal-quick .dropdown-item:hover {
+    background-color: #f8fafc !important;
+    color: var(--accent) !important;
+}
+.nav-horizontal-quick .dropdown-item.active,
+.nav-horizontal-quick .dropdown-item:active {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+}
+
+/* High-Density Laptop Breakpoint (1366px, 1280px, 1024px) */
+@media (max-width: 1400px) {
+    body {
+        font-size: 0.84rem;
+    }
+    .table th {
+        padding: 8px 10px !important;
+        font-size: 0.72rem !important;
+    }
+    .table td {
+        padding: 8px 10px !important;
+        font-size: 0.82rem !important;
+    }
+    .card {
+        margin-bottom: 16px !important;
+    }
+    .card-header {
+        padding: 10px 14px !important;
+    }
+    .btn {
+        padding: 6px 12px !important;
+        font-size: 0.8rem !important;
+    }
+    .btn-sm {
+        padding: 4px 8px !important;
+        font-size: 0.75rem !important;
+    }
+    .form-control, .form-select {
+        font-size: 0.82rem !important;
+        padding: 5px 10px !important;
+    }
+    .navbar {
+        padding-top: 6px !important;
+        padding-bottom: 6px !important;
+    }
+    .navbar h4 {
+        font-size: 1.15rem !important;
+    }
+}
+
+/* Short Vertical Height Screens (<= 800px e.g. 1366x768, 1280x720) */
+@media (max-height: 800px) {
+    .container-fluid.main-page-container {
+        padding: 8px 12px !important;
+    }
+    .card-header {
+        padding: 8px 12px !important;
+    }
+    .pos-catalog-card {
+        height: calc(100vh - 100px) !important;
+    }
+    .pos-cart-modal-dialog {
+        max-height: 96vh !important;
+        margin-top: 10px !important;
+    }
+    .pos-cart-modal-body {
+        max-height: calc(100vh - 120px) !important;
+        overflow-y: auto !important;
+        padding: 10px !important;
+    }
+    .pos-cart-table-wrapper {
+        max-height: 220px !important;
+    }
+}
+
+/* Mobile & Small Tablet Tweaks (<= 768px) */
+@media (max-width: 767.98px) {
+    .container-fluid.main-page-container {
+        padding: 8px !important;
+    }
+    .navbar h4 {
+        font-size: 1rem !important;
+    }
+    .nav-horizontal-quick .nav-link {
+        font-size: 0.78rem !important;
+        padding: 5px 9px !important;
+    }
+    .table-responsive {
+        border: 0;
+    }
+}
+
+/* ==========================================================================
+   ENTERPRISE HIGH-CONTRAST THERMAL RECEIPT PRINTING (80mm / 78mm / 58mm)
+   Ensures pitch-black, bold, crisp output on Monochrome/Black & White Thermal Heads
+   ========================================================================== */
+@media print {
+    #thermalDirectPrintArea,
+    .thermal-receipt,
+    .receipt-container,
+    #receiptTemplateContainer,
+    #refundVoucherPrintContainer,
+    #exchangeVoucherPrintContainer {
+        color: #000000 !important;
+        font-family: Arial, "Helvetica Neue", Helvetica, sans-serif !important;
+        font-weight: 700 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    #thermalDirectPrintArea *,
+    .thermal-receipt *,
+    .receipt-container *,
+    #receiptTemplateContainer *,
+    #refundVoucherPrintContainer *,
+    #exchangeVoucherPrintContainer * {
+        color: #000000 !important;
+        font-weight: 700 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .receipt-divider {
+        border-top: 1.5px dashed #000000 !important;
+        margin: 4px 0 !important;
+        width: 100% !important;
+        height: 0 !important;
+    }
+
+    .receipt-divider-double {
+        border-top: 2.5px solid #000000 !important;
+        margin: 5px 0 !important;
+        width: 100% !important;
+        height: 0 !important;
+    }
+
+    .receipt-logo {
+        filter: grayscale(100%) contrast(200%) !important;
+    }
+}
