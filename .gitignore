@@ -1,9 +1,11 @@
-﻿# Environment Credentials
+# Environment Credentials
 .env
 
 # Logs and system dumps
 *.log
 error_log
+backups/*.sql
+/store_2_pos.sql
 
 # IDE & Editor files
 .vscode/
