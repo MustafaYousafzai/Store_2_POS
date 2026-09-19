@@ -5,7 +5,8 @@ requirePermission('CREATE_SALE');
 
 <style>
 .scan-highlight {
-    background-color: #d1fae5 !important;
+    background-color: rgba(16, 185, 129, 0.25) !important;
+    color: #34d399 !important;
     transition: background-color 0.4s ease;
 }
 </style>
@@ -15,9 +16,9 @@ requirePermission('CREATE_SALE');
     <div class="row g-2 g-md-3">
         <div class="col-12 d-print-none">
             <div class="card d-flex flex-column pos-catalog-card" style="height: calc(100vh - 110px); min-height: 400px; overflow: hidden; border-radius: 8px; border: 1px solid var(--card-border);">
-                <div class="card-header bg-white py-2 px-2 px-md-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <div class="card-header py-2 px-2 px-md-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
                     <div class="d-flex align-items-center gap-2 flex-grow-1 flex-wrap">
-                        <h5 class="mb-0 font-weight-bold text-slate fs-6"><i class="fas fa-boxes me-1 text-danger"></i>Catalog</h5>
+                        <h5 class="mb-0 font-weight-bold text-light fs-6"><i class="fas fa-boxes me-1 text-danger"></i>Catalog</h5>
                         <!-- Global Scanner Input (focused by default) with Autocomplete -->
                         <div class="position-relative flex-grow-1" style="max-width: 260px; min-width: 170px;">
                             <div class="input-group input-group-sm">
@@ -91,25 +92,25 @@ requirePermission('CREATE_SALE');
             <div class="modal-body p-2 p-md-3 pos-cart-modal-body">
                 <div class="row g-2 g-md-3">
                     <!-- Left Side: Cart Items list & Inline Search (col-lg-7) -->
-                    <div class="col-lg-7 d-flex flex-column border-end-lg pe-lg-3" style="border-right: 1px solid #cbd5e1;">
+                    <div class="col-lg-7 d-flex flex-column border-end-lg pe-lg-3" style="border-right: 1px solid var(--border-subtle, rgba(255,255,255,0.08));">
                         <!-- Cart Actions & Hold Bills -->
-                        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom" style="border-color: var(--border-subtle, rgba(255,255,255,0.08)) !important;">
                             <div class="d-flex gap-1 align-items-center">
-                                <button type="button" class="btn btn-sm btn-outline-warning text-dark font-weight-bold" id="btnShowHeldList" data-bs-toggle="collapse" data-bs-target="#heldCartsCollapse" aria-expanded="false" aria-controls="heldCartsCollapse">
+                                <button type="button" class="btn btn-sm btn-outline-warning font-weight-bold" id="btnShowHeldList" data-bs-toggle="collapse" data-bs-target="#heldCartsCollapse" aria-expanded="false" aria-controls="heldCartsCollapse">
                                     <i class="fas fa-pause-circle"></i> Held Bills (<span id="heldCartsCount">0</span>)
                                 </button>
                                 <button type="button" class="btn btn-sm btn-outline-secondary" id="clearCartBtn"><i class="fas fa-trash-can"></i> Clear</button>
-                                <button type="button" class="btn btn-sm btn-warning text-dark font-weight-bold" id="holdCartBtn" title="Suspend Cart"><i class="fas fa-pause"></i> Hold</button>
+                                <button type="button" class="btn btn-sm btn-warning font-weight-bold" id="holdCartBtn" title="Suspend Cart"><i class="fas fa-pause"></i> Hold</button>
                             </div>
                             <kbd class="bg-secondary text-white ms-1 small">Ctrl+H toggles Held Bills</kbd>
                         </div>
 
                         <!-- Held Bills Collapse drawer inside Modal -->
                         <div class="collapse mb-3" id="heldCartsCollapse">
-                            <div class="card card-body p-2 border-warning bg-warning-subtle">
-                                <h6 class="font-weight-bold text-dark mb-2 small"><i class="fas fa-pause-circle"></i> Suspended Carts / Held Bills</h6>
+                            <div class="card card-body p-2 border-warning" style="background: rgba(245, 158, 11, 0.08);">
+                                <h6 class="font-weight-bold text-warning mb-2 small"><i class="fas fa-pause-circle"></i> Suspended Carts / Held Bills</h6>
                                 <div class="table-responsive" style="max-height: 150px;">
-                                    <table class="table table-sm table-hover align-middle mb-0" style="font-size: 0.8rem; background: #fff;">
+                                    <table class="table table-sm table-hover align-middle mb-0" style="font-size: 0.8rem;">
                                         <thead class="table-light">
                                             <tr>
                                                 <th>Hold #</th>

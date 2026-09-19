@@ -21,7 +21,7 @@ if (!function_exists('isPageActive')) {
 ?>
 
 <!-- Universal Horizontal Quick Navigation Bar -->
-<div class="card mb-2 mb-md-3 d-print-none shadow-sm border-0 quick-nav-card" style="background: #ffffff; border-radius: 8px; overflow: visible !important;">
+<div class="card mb-2 mb-md-3 d-print-none shadow-sm quick-nav-card" style="background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: 8px; overflow: visible !important;">
     <div class="card-body py-1 py-md-2 px-2 px-md-3" style="overflow: visible !important;">
         <ul class="nav nav-pills nav-horizontal-quick justify-content-start align-items-center flex-wrap gap-1" style="overflow: visible !important;">
             <?php if (isAdmin()): ?>

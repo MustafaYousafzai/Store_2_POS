@@ -1,106 +1,130 @@
-/* 
- * One Dollar Shop - SaaS UI Theme (style.css)
- * Font: Inter (loaded via header)
- */
+/* ==========================================================================
+   ONE DOLLAR SHOP - ULTRA-MODERN DARK THEME (SaaS POS SYSTEM)
+   Architected for High Contrast, Eye Comfort & Pristine Thermal Printing
+   Font: Inter (Google Fonts)
+   ========================================================================== */
 
-:root {
-    --primary: #0f172a;       /* Slate-900 */
-    --primary-light: #1e293b; /* Slate-800 */
-    --accent: #ef4444;        /* Modern Red */
-    --accent-hover: #dc2626;  /* Crimson hover */
-    --bg-main: #f8fafc;       /* Soft Slate gray */
-    --card-border: #f1f5f9;   /* Light Slate border */
-    --text-main: #1e293b;
-    --text-muted: #64748b;
+:root,
+[data-bs-theme="dark"],
+body.dark-theme {
+    /* 1. Core Surfaces & Elevation Hierarchy */
+    --bg-canvas: #090d16;          /* Deepest midnight canvas */
+    --bg-main: #090d16;            /* Compatibility alias */
+    --surface-card: #111827;       /* 1st Tier Card Surface (Slate-900) */
+    --surface-header: #0f172a;     /* Headers & Sticky table heads */
+    --surface-modal: #131c2e;      /* Elevated Modals & Popovers */
+    --surface-input: #0b1120;      /* Recessed Form Controls */
+    --surface-hover: rgba(255, 255, 255, 0.05); /* Luminous micro-interaction */
+    --surface-active: rgba(239, 68, 68, 0.15);  /* Subtle accent tint */
+
+    /* 2. Border & Divider System */
+    --border-subtle: rgba(255, 255, 255, 0.08); /* Delicate boundary */
+    --border-medium: rgba(255, 255, 255, 0.14); /* Input / Card outline */
+    --border-strong: rgba(255, 255, 255, 0.24); /* Focus / Active outline */
+    --card-border: rgba(255, 255, 255, 0.08);   /* Compatibility alias */
+
+    /* 3. Typography & Text Hierarchy */
+    --text-main: #f8fafc;          /* High contrast Slate-50 */
+    --text-secondary: #cbd5e1;     /* Slate-300 */
+    --text-muted: #94a3b8;         /* Slate-400 */
+    --text-dim: #64748b;           /* Slate-500 */
+
+    /* 4. Signature Brand Accents */
+    --primary: #0f172a;            /* Midnight Slate */
+    --primary-light: #1e293b;      /* Slate-800 */
+    --accent: #ef4444;             /* Radiant Crimson Coral */
+    --accent-hover: #dc2626;       /* Deep Crimson */
+    --accent-glow: rgba(239, 68, 68, 0.35);
+    --accent-subtle: rgba(239, 68, 68, 0.12);
+
+    /* 5. Semantic Color Tints */
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-info: #06b6d4;
+    --color-purple: #a855f7;
+
+    /* 6. Layout Constants */
     --sidebar-width: 260px;
+
+    /* Bootstrap 5.3 Dark Variable Overrides */
+    --bs-body-bg: var(--bg-canvas);
+    --bs-body-color: var(--text-main);
+    --bs-card-bg: var(--surface-card);
+    --bs-card-border-color: var(--border-subtle);
+    --bs-card-cap-bg: var(--surface-header);
+    --bs-border-color: var(--border-subtle);
+    --bs-tertiary-bg: var(--surface-header);
+    --bs-secondary-bg: var(--surface-card);
+    --bs-modal-bg: var(--surface-modal);
+    --bs-modal-border-color: var(--border-medium);
 }
 
-body {
-    background-color: var(--bg-main);
-    color: var(--text-main);
+/* ==========================================================================
+   GLOBAL RESET & MASTER UTILITY OVERRIDES (100% Visual Cohesion)
+   ========================================================================== */
+html, body {
+    background-color: var(--bg-canvas) !important;
+    color: var(--text-main) !important;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
     font-size: 0.9rem;
     line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
+/* Auto-map legacy light utility classes across all templates */
+body.dark-theme .bg-white,
+[data-bs-theme="dark"] .bg-white {
+    background-color: var(--surface-card) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+body.dark-theme .bg-light,
+[data-bs-theme="dark"] .bg-light {
+    background-color: var(--surface-input) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+body.dark-theme .text-dark,
+[data-bs-theme="dark"] .text-dark,
+body.dark-theme .text-slate,
+[data-bs-theme="dark"] .text-slate {
+    color: var(--text-main) !important;
+}
+
+body.dark-theme .text-secondary,
+[data-bs-theme="dark"] .text-secondary {
+    color: var(--text-muted) !important;
+}
+
+body.dark-theme .text-muted,
+[data-bs-theme="dark"] .text-muted {
+    color: var(--text-muted) !important;
+}
+
+body.dark-theme .border,
+body.dark-theme .border-bottom,
+body.dark-theme .border-top,
+body.dark-theme .border-end,
+body.dark-theme .border-start,
+[data-bs-theme="dark"] .border,
+[data-bs-theme="dark"] .border-bottom,
+[data-bs-theme="dark"] .border-top,
+[data-bs-theme="dark"] .border-end,
+[data-bs-theme="dark"] .border-start {
+    border-color: var(--border-subtle) !important;
+}
+
+/* Base Wrapper */
 .wrapper {
     display: flex;
     width: 100%;
     align-items: stretch;
     min-height: 100vh;
-}
-
-/* Sidebar Styles Overhaul */
-#sidebar {
-    min-width: var(--sidebar-width);
-    max-width: var(--sidebar-width);
-    margin-left: calc(-1 * var(--sidebar-width));
-    background-color: var(--primary) !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1050;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    overflow-y: auto;
-}
-
-#sidebar .sidebar-header {
-    background-color: #020617; /* Extra deep dark */
-}
-
-#sidebar ul.components {
-    padding: 15px 0;
-}
-
-#sidebar ul li a {
-    color: #94a3b8; /* Cool slate */
-    font-weight: 500;
-    font-size: 0.85rem;
-    padding: 11px 20px;
-    border-radius: 6px;
-    margin: 2px 12px;
-    display: block;
-    transition: all 0.2s ease;
-    text-decoration: none;
-}
-
-#sidebar ul li a i {
-    width: 20px;
-}
-
-#sidebar ul li a:hover {
-    color: #fff;
-    background-color: var(--primary-light) !important;
-}
-
-#sidebar ul li.active > a, 
-#sidebar ul li a:focus {
-    color: #fff;
-    background-color: var(--accent) !important;
-}
-
-.bg-secondary-dark {
-    background-color: rgba(255,255,255,0.03);
-}
-
-/* Sidebar Open State */
-#sidebar.open {
-    margin-left: 0 !important;
-    box-shadow: 4px 0 24px rgba(0,0,0,0.3);
-}
-
-/* Sidebar Backdrop on mobile/tablet */
-#sidebarBackdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(15, 23, 42, 0.55);
-    backdrop-filter: blur(2px);
-    z-index: 1040;
+    background-color: var(--bg-canvas);
 }
 
 /* Main Content Area */
@@ -108,7 +132,7 @@ body {
     width: 100%;
     min-height: 100vh;
     margin-left: 0;
-    background-color: var(--bg-main);
+    background-color: var(--bg-canvas);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -119,423 +143,412 @@ body {
     }
 }
 
-.navbar {
-    background: #ffffff !important;
-    border-bottom: 1px solid var(--card-border) !important;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+/* ==========================================================================
+   SIDEBAR STYLING (Luxury Obsidian Slate)
+   ========================================================================== */
+#sidebar {
+    min-width: var(--sidebar-width);
+    max-width: var(--sidebar-width);
+    margin-left: calc(-1 * var(--sidebar-width));
+    background-color: #070b12 !important;
+    border-right: 1px solid var(--border-subtle);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1050;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
 }
 
-/* Card Styling - SaaS Elevate */
+#sidebar .sidebar-header {
+    background-color: #04060a !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+}
+
+#sidebar ul.components {
+    padding: 15px 0;
+}
+
+#sidebar ul li a {
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.85rem;
+    padding: 11px 20px;
+    border-radius: 8px;
+    margin: 3px 12px;
+    display: block;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+#sidebar ul li a i {
+    width: 22px;
+}
+
+#sidebar ul li a:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+#sidebar ul li.active > a, 
+#sidebar ul li a:focus {
+    color: #ffffff !important;
+    background-color: var(--accent) !important;
+    box-shadow: 0 4px 14px var(--accent-glow) !important;
+}
+
+.bg-secondary-dark {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+#sidebar.open {
+    margin-left: 0 !important;
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.6);
+}
+
+#sidebarBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(4, 6, 10, 0.75);
+    backdrop-filter: blur(4px);
+    z-index: 1040;
+}
+
+/* ==========================================================================
+   TOP NAVBAR & QUICK NAVIGATION SYSTEM
+   ========================================================================== */
+.navbar,
+.bg-dark-header {
+    background-color: var(--surface-header) !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.navbar .btn-outline-secondary {
+    border-color: var(--border-medium);
+    color: var(--text-secondary);
+}
+.navbar .btn-outline-secondary:hover {
+    background-color: var(--surface-hover);
+    color: #ffffff;
+    border-color: var(--border-strong);
+}
+
+/* Quick Navigation Card */
+.quick-nav-card {
+    background-color: var(--surface-card) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: 12px;
+    overflow: visible !important;
+    position: relative;
+    z-index: 100 !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+.quick-nav-card .card-body {
+    overflow: visible !important;
+}
+
+.nav-horizontal-quick {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    overflow: visible !important;
+    gap: 6px !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+
+.nav-horizontal-quick .nav-item {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: inline-block !important;
+}
+
+.nav-horizontal-quick .nav-link {
+    white-space: nowrap !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    padding: 6px 14px !important;
+    border-radius: 8px !important;
+    color: var(--text-secondary) !important;
+    background-color: var(--surface-input) !important;
+    border: 1px solid var(--border-subtle) !important;
+    transition: all 0.15s ease-in-out;
+    display: inline-flex !important;
+    align-items: center;
+    text-decoration: none !important;
+}
+
+.nav-horizontal-quick .nav-link:hover {
+    background-color: var(--surface-hover) !important;
+    color: #ffffff !important;
+    border-color: var(--border-medium) !important;
+    transform: translateY(-1px);
+}
+
+.nav-horizontal-quick .nav-link.active {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 3px 12px var(--accent-glow) !important;
+}
+
+.nav-horizontal-quick .nav-link.active i {
+    color: #ffffff !important;
+}
+
+.nav-horizontal-quick .dropdown-menu,
+.dropdown-menu {
+    background-color: var(--surface-modal) !important;
+    border: 1px solid var(--border-medium) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6) !important;
+    padding: 6px !important;
+    min-width: 230px !important;
+    z-index: 1070 !important;
+    animation: dropdownFadeIn 0.15s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.nav-horizontal-quick .dropdown-item,
+.dropdown-item {
+    border-radius: 6px !important;
+    font-size: 0.84rem !important;
+    font-weight: 500 !important;
+    padding: 8px 12px !important;
+    color: var(--text-secondary) !important;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+}
+
+.nav-horizontal-quick .dropdown-item:hover,
+.dropdown-item:hover {
+    background-color: var(--surface-hover) !important;
+    color: #ffffff !important;
+}
+
+.nav-horizontal-quick .dropdown-item.active,
+.dropdown-item.active {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+}
+
+.dropdown-divider {
+    border-color: var(--border-subtle) !important;
+}
+
+/* ==========================================================================
+   CARDS & SURFACE CONTAINERS
+   ========================================================================== */
 .card {
-    background-color: #ffffff;
-    border: 1px solid var(--card-border);
-    border-radius: 10px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    background-color: var(--surface-card) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
     margin-bottom: 24px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .card:hover {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
 }
 
 .card-header {
-    background-color: #ffffff;
-    border-bottom: 1px solid var(--card-border);
-    padding: 15px 20px;
+    background-color: var(--surface-header) !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    padding: 14px 18px;
+    color: var(--text-main);
 }
 
-/* Global button redesign */
+.card-footer {
+    background-color: var(--surface-header) !important;
+    border-top: 1px solid var(--border-subtle) !important;
+    padding: 12px 18px;
+}
+
+/* ==========================================================================
+   TABLES (High-Contrast Dark Grid)
+   ========================================================================== */
+.table {
+    font-size: 0.85rem;
+    color: var(--text-main) !important;
+    border-color: var(--border-subtle) !important;
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--text-main);
+    --bs-table-border-color: var(--border-subtle);
+}
+
+.table th {
+    font-weight: 600;
+    color: var(--text-muted) !important;
+    background-color: var(--surface-header) !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border-medium) !important;
+}
+
+.table td {
+    padding: 12px 14px;
+    color: var(--text-main) !important;
+    border-color: var(--border-subtle) !important;
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--surface-hover) !important;
+}
+
+.table-light,
+.table-dark-sticky {
+    background-color: var(--surface-header) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.015);
+}
+
+/* ==========================================================================
+   BUTTONS & CONTROLS
+   ========================================================================== */
 .btn {
-    border-radius: 6px;
-    font-weight: 550;
+    border-radius: 8px;
+    font-weight: 600;
     font-size: 0.85rem;
     padding: 8px 16px;
     transition: all 0.2s ease;
 }
 
 .btn-primary {
-    background-color: var(--accent);
-    border-color: var(--accent);
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px var(--accent-glow);
 }
 
 .btn-primary:hover, .btn-primary:focus {
     background-color: var(--accent-hover) !important;
     border-color: var(--accent-hover) !important;
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
+    box-shadow: 0 4px 14px var(--accent-glow) !important;
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 2px 8px var(--accent-glow);
+}
+.btn-danger:hover {
+    background-color: var(--accent-hover) !important;
+    border-color: var(--accent-hover) !important;
+    box-shadow: 0 4px 14px var(--accent-glow) !important;
 }
 
 .btn-outline-secondary {
-    border-color: #cbd5e1;
-    color: #475569;
+    border-color: var(--border-medium) !important;
+    color: var(--text-secondary) !important;
 }
 
 .btn-outline-secondary:hover {
-    background-color: #f1f5f9;
-    color: #334155;
-    border-color: #94a3b8;
+    background-color: var(--surface-hover) !important;
+    color: #ffffff !important;
+    border-color: var(--border-strong) !important;
 }
 
-/* Table cleanups */
-.table {
-    font-size: 0.85rem;
+.btn-outline-danger {
+    border-color: rgba(239, 68, 68, 0.4) !important;
+    color: #f87171 !important;
 }
-.table th {
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    padding: 12px 16px;
-}
-.table td {
-    padding: 14px 16px;
-    color: var(--text-main);
-}
-
-/* POS Screen custom adjustments */
-.pos-container {
-    height: calc(100vh - 85px);
-    overflow: hidden;
-}
-
-.cart-summary {
-    background-color: #ffffff;
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
+.btn-outline-danger:hover {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+    border-color: var(--accent) !important;
 }
 
 .btn-xs {
-    padding: 0.25rem 0.4rem;
+    padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
-    border-radius: 0.25rem;
-}
-
-.catalog-row {
-    transition: background-color 0.15s ease;
-}
-.catalog-row:hover {
-    background-color: rgba(239, 68, 68, 0.04) !important;
-}
-
-/* Mobile & Small Screen Responsiveness Rules */
-@media (max-width: 991.98px) {
-    #sidebar {
-        margin-left: calc(-1 * var(--sidebar-width));
-        position: fixed;
-        height: 100vh;
-    }
-    
-    #sidebar.open {
-        margin-left: 0;
-    }
-    
-    #content {
-        margin-left: 0 !important;
-        width: 100% !important;
-    }
-    
-    .pos-container {
-        height: auto;
-        overflow: visible;
-    }
-    
-    .cart-items {
-        max-height: 400px;
-    }
-}
-
-/* Enterprise Responsiveness for 11", 13", 16" Laptop Screens (1280px - 1440px) */
-@media (max-width: 1400px) {
-    .table td, .table th {
-        padding: 0.5rem 0.5rem;
-        font-size: 0.85rem;
-    }
-    .kpi-stat-card {
-        padding: 0.85rem !important;
-    }
-    .kpi-stat-card h2 {
-        font-size: 1.35rem !important;
-    }
-    .main-page-container {
-        padding: 0.6rem !important;
-    }
-    .action-tile-btn {
-        padding: 0.75rem 0.5rem !important;
-    }
-    .action-tile-btn i {
-        font-size: 1.25rem !important;
-    }
-}
-
-/* Dynamic toast configurations */
-.toast {
-    border-radius: 8px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    border-radius: 0.35rem;
 }
 
 /* ==========================================================================
-   ENTERPRISE PRINT STYLESHEET (Thermal Receipts, Barcodes & Reports)
+   FORM CONTROLS & INPUTS
    ========================================================================== */
-/* On-Screen Receipt Preview Styling (Inside Modals) */
-.receipt-print {
-    display: block;
-    width: 100%;
-    max-width: 340px;
-    margin: 0 auto;
-    padding: 15px 12px;
-    box-sizing: border-box;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 11px;
-    line-height: 1.35;
-    color: #111827;
-    background: #ffffff;
-    border: 1px dashed #cbd5e1;
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.receipt-print table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.receipt-print .center {
-    text-align: center;
-}
-
-.receipt-print .right {
-    text-align: right;
-}
-
-.receipt-logo {
-    max-width: 105px;
-    max-height: 105px;
-    width: auto;
-    height: auto;
-    margin: 0 auto 5px auto;
-    display: block;
-    object-fit: contain;
-}
-
-.receipt-divider {
-    border-top: 1px dashed #000000;
-    margin: 5px 0;
-    width: 100%;
-    height: 1px;
-    overflow: hidden;
-}
-
-.receipt-divider-double {
-    border-top: 2px solid #000000;
-    margin: 6px 0;
-    width: 100%;
-    height: 2px;
-    overflow: hidden;
-}
-
-@media print {
-    @page {
-        size: 78mm auto;
-        margin: 0mm !important;
-    }
-
-    /* 1. Barcode sticker prints mode */
-    body.printing-barcodes {
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-    body.printing-barcodes #content,
-    body.printing-barcodes .wrapper,
-    body.printing-barcodes .container-fluid,
-    body.printing-barcodes #thermalDirectPrintArea,
-    body.printing-barcodes .modal,
-    body.printing-barcodes .modal-backdrop {
-        display: none !important;
-    }
-    body.printing-barcodes #barcodePrintArea {
-        display: block !important;
-        background: #fff !important;
-        width: 100% !important;
-    }
-    .barcode-sticker {
-        width: 50mm;
-        height: 25mm;
-        padding: 1.5mm;
-        margin: 0 auto;
-        text-align: center;
-        font-family: Arial, sans-serif;
-        font-size: 8px;
-        line-height: 1.1;
-        box-sizing: border-box;
-        page-break-after: always;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        overflow: hidden;
-    }
-    .barcode-sticker svg {
-        max-width: 100%;
-        height: 10mm !important;
-    }
-
-    /* 2. Standard Business Reports Mode (P&L, Financials) */
-    body.printing-report {
-        width: 100% !important;
-        margin: 5mm auto !important;
-    }
-    body.printing-report #thermalDirectPrintArea {
-        display: none !important;
-    }
-    body.printing-report .wrapper,
-    body.printing-report #content,
-    body.printing-report #pnlReportCard {
-        display: block !important;
-        width: 100% !important;
-    }
-
-    /* 3. Fallback Receipt Printing directly on Main Window */
-    body:not(.printing-barcodes):not(.printing-report) {
-        margin: 0 !important;
-        padding: 0 !important;
-        background: #ffffff !important;
-        width: 78mm !important;
-        overflow: visible !important;
-    }
-    body:not(.printing-barcodes):not(.printing-report) .wrapper,
-    body:not(.printing-barcodes):not(.printing-report) .toast-container,
-    body:not(.printing-barcodes):not(.printing-report) .modal,
-    body:not(.printing-barcodes):not(.printing-report) .modal-backdrop,
-    body:not(.printing-barcodes):not(.printing-report) #sidebar,
-    body:not(.printing-barcodes):not(.printing-report) .navbar,
-    body:not(.printing-barcodes):not(.printing-report) .btn {
-        display: none !important;
-        height: 0 !important;
-        max-height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden !important;
-        border: none !important;
-    }
-    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea {
-        display: block !important;
-        position: static !important;
-        width: 78mm !important;
-        max-width: 78mm !important;
-        margin: 0 auto !important;
-        padding: 4mm 3mm 6mm 3mm !important;
-        box-sizing: border-box !important;
-        font-family: 'Courier New', Courier, monospace !important;
-        font-size: 11px !important;
-        line-height: 1.3 !important;
-        color: #000000 !important;
-        background: #ffffff !important;
-        page-break-inside: avoid !important;
-    }
-    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea * {
-        color: #000000 !important;
-        box-sizing: border-box !important;
-    }
-    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea table {
-        width: 100% !important;
-        font-size: 11px !important;
-        border-collapse: collapse !important;
-    }
-    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea .center {
-        text-align: center !important;
-    }
-    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea .right {
-        text-align: right !important;
-    }
-    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea .receipt-divider {
-        border-top: 1px dashed #000000 !important;
-        margin: 5px 0 !important;
-        width: 100% !important;
-        height: 1px !important;
-    }
-}
-
-/* Quick Navbar Navigation Overhauls */
-.nav-pills .nav-link {
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 6px;
-    padding: 8px 16px;
-    border: 1px solid transparent;
-}
-
-.nav-pills .nav-link:not(.active) {
-    color: #475569 !important; /* Slate-600 */
-}
-
-/* Hover micro-interactions */
-.nav-pills .nav-link:not(.active):hover {
-    color: #ef4444 !important; /* Accent Crimson */
-    background-color: #fef2f2 !important; /* Very light Crimson tint */
-    border-color: #fee2e2;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.08), 0 2px 4px -1px rgba(239, 68, 68, 0.04);
-}
-
-/* Active buttons drop shadow */
-.nav-pills .nav-link.active {
-    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);
-}
-
-/* Dropdown menu animations */
-.nav-pills .dropdown-menu {
-    border: 1px solid #f1f5f9;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-    margin-top: 4px;
+.form-control,
+.form-select {
+    background-color: var(--surface-input) !important;
+    border: 1px solid var(--border-medium) !important;
+    color: #ffffff !important;
     border-radius: 8px;
-    overflow: hidden;
+    font-size: 0.88rem;
+    transition: all 0.2s ease;
 }
 
-.nav-pills .dropdown-item {
-    transition: all 0.15s ease;
-    padding: 8px 16px;
-    font-size: 0.85rem;
-    font-weight: 500;
+.form-control:focus,
+.form-select:focus {
+    background-color: #0e1628 !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
+    color: #ffffff !important;
 }
 
-.nav-pills .dropdown-item:hover {
-    background-color: #f1f5f9;
-    color: #ef4444 !important;
+.form-control::placeholder {
+    color: var(--text-dim) !important;
 }
 
-.nav-pills .dropdown-item.active {
-    background-color: #ef4444 !important;
-    color: #fff !important;
+.form-label {
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.82rem;
+    margin-bottom: 0.35rem;
 }
 
-/* Floating Autocomplete Search Results dropdown panel */
+.input-group-text {
+    background-color: var(--surface-header) !important;
+    border: 1px solid var(--border-medium) !important;
+    color: var(--text-muted) !important;
+}
+
+/* Autocomplete search floating dropdown */
 .search-results-panel {
     position: absolute;
     left: 0;
     right: 0;
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 6px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    max-height: 250px;
+    background: var(--surface-modal) !important;
+    border: 1px solid var(--border-medium) !important;
+    border-radius: 10px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6) !important;
+    max-height: 260px;
     overflow-y: auto;
     z-index: 2100;
 }
 
-/* Cart Quantity and Discount input ergonomics */
-.cart-qty-input::-webkit-outer-spin-button,
-.cart-qty-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-.cart-qty-input {
-    -moz-appearance: textfield;
-    appearance: textfield;
-    padding-left: 2px !important;
-    padding-right: 2px !important;
+.list-group-item {
+    background-color: transparent !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-subtle) !important;
 }
 
-/* Amount & Currency Number Input Protection: Disable Spin Buttons & Accidental Wheel Changes */
+.list-group-item:hover {
+    background-color: var(--surface-hover) !important;
+    color: #ffffff !important;
+}
+
+/* Amount & Currency Number Input Protection */
 input[type=number].no-spin::-webkit-inner-spin-button, 
 input[type=number].no-spin::-webkit-outer-spin-button,
 input[type=number].currency-input::-webkit-inner-spin-button, 
@@ -543,14 +556,17 @@ input[type=number].currency-input::-webkit-outer-spin-button,
 .amount-input::-webkit-inner-spin-button,
 .amount-input::-webkit-outer-spin-button,
 .cart-item-discount-input::-webkit-inner-spin-button,
-.cart-item-discount-input::-webkit-outer-spin-button { 
+.cart-item-discount-input::-webkit-outer-spin-button,
+.cart-qty-input::-webkit-outer-spin-button,
+.cart-qty-input::-webkit-inner-spin-button { 
     -webkit-appearance: none !important; 
     margin: 0 !important; 
 }
 input[type=number].no-spin,
 input[type=number].currency-input,
 .amount-input,
-.cart-item-discount-input {
+.cart-item-discount-input,
+.cart-qty-input {
     -moz-appearance: textfield !important;
     appearance: textfield !important;
 }
@@ -559,17 +575,17 @@ input[type=number].currency-input,
 .qty-stepper {
     display: inline-flex;
     align-items: center;
-    border: 1px solid #cbd5e1;
+    border: 1px solid var(--border-medium);
     border-radius: 8px;
-    background: #ffffff;
+    background: var(--surface-input);
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     vertical-align: middle;
 }
 .qty-stepper .btn-qty-step {
     border: none;
-    background: #f1f5f9;
-    color: #334155;
+    background: var(--surface-header);
+    color: var(--text-secondary);
     padding: 2px 9px;
     font-size: 0.8rem;
     font-weight: 700;
@@ -583,17 +599,17 @@ input[type=number].currency-input,
     user-select: none;
 }
 .qty-stepper .btn-qty-step:hover:not(:disabled) {
-    background: #e2e8f0;
-    color: #0f172a;
+    background: var(--surface-hover);
+    color: #ffffff;
 }
 .qty-stepper .btn-qty-step:active:not(:disabled) {
-    background: #cbd5e1;
+    background: var(--surface-card);
     transform: scale(0.96);
 }
 .qty-stepper .btn-qty-step:disabled {
-    opacity: 0.35;
+    opacity: 0.3;
     cursor: not-allowed;
-    background: #f8fafc;
+    background: var(--surface-input);
 }
 .qty-stepper .qty-stepper-input {
     border: none;
@@ -602,127 +618,132 @@ input[type=number].currency-input,
     height: 30px;
     font-weight: 700;
     font-size: 0.95rem;
-    color: #0f172a;
+    color: #ffffff;
     padding: 0 2px;
-    background: #ffffff;
+    background: var(--surface-input);
     font-family: monospace;
 }
 .qty-stepper .qty-stepper-input:focus {
     outline: none;
-    background: #f8fafc;
-}
-
-/* Subtle alert color helpers for cross-browser & BS version compatibility */
-.bg-success-subtle {
-    background-color: #d1e7dd !important;
-    color: #0f5132 !important;
-}
-.bg-danger-subtle {
-    background-color: #f8d7da !important;
-    color: #842029 !important;
-}
-.border-success {
-    border-color: #198754 !important;
-}
-.border-danger {
-    border-color: #dc3545 !important;
-}
-#modalConfirmExchange, #modalConfirmRefund {
-    z-index: 1065 !important;
+    background: #0e1628;
 }
 
 /* ==========================================================================
-   LAPTOP & COMPACT SCREEN RESPONSIVENESS OVERHAUL (1366x768 / 1280x800)
+   MODALS, TOASTS & ALERTS
    ========================================================================== */
-
-/* Universal Horizontal Quick Navigation Bar - Clean, Zero-Scroll, Dropdown Safe */
-.quick-nav-card {
-    overflow: visible !important;
-    position: relative;
-    z-index: 100 !important;
-}
-.quick-nav-card .card-body {
-    overflow: visible !important;
-}
-.nav-horizontal-quick {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    overflow: visible !important;
-    gap: 6px !important;
-    align-items: center !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    list-style: none !important;
-}
-.nav-horizontal-quick .nav-item {
-    margin: 0 !important;
-    padding: 0 !important;
-    display: inline-block !important;
-}
-.nav-horizontal-quick .nav-link {
-    white-space: nowrap !important;
-    font-size: 0.82rem !important;
-    font-weight: 500 !important;
-    padding: 6px 13px !important;
-    border-radius: 6px !important;
-    color: #334155 !important;
-    background-color: #f8fafc !important;
-    border: 1px solid #e2e8f0 !important;
-    transition: all 0.15s ease-in-out;
-    display: inline-flex !important;
-    align-items: center;
-    text-decoration: none !important;
-}
-.nav-horizontal-quick .nav-link:hover {
-    background-color: #f1f5f9 !important;
-    color: #0f172a !important;
-    border-color: #cbd5e1 !important;
-}
-.nav-horizontal-quick .nav-link.active {
-    background-color: var(--accent) !important;
-    color: #ffffff !important;
-    font-weight: 600 !important;
-    border-color: var(--accent) !important;
-    box-shadow: 0 2px 5px rgba(239, 68, 68, 0.25) !important;
-}
-.nav-horizontal-quick .nav-link.active i {
-    color: #ffffff !important;
-}
-.nav-horizontal-quick .dropdown-menu {
-    border: 1px solid #e2e8f0 !important;
-    border-radius: 10px !important;
-    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.15), 0 4px 10px rgba(15, 23, 42, 0.08) !important;
-    padding: 6px !important;
-    min-width: 230px !important;
-    z-index: 1060 !important;
-    position: absolute !important;
-    animation: dropdownFadeIn 0.15s ease-out;
-}
-@keyframes dropdownFadeIn {
-    from { opacity: 0; transform: translateY(-4px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.nav-horizontal-quick .dropdown-item {
-    border-radius: 6px !important;
-    font-size: 0.84rem !important;
-    font-weight: 500 !important;
-    padding: 8px 12px !important;
-    color: #334155 !important;
-    transition: all 0.15s ease;
-    display: flex;
-    align-items: center;
-}
-.nav-horizontal-quick .dropdown-item:hover {
-    background-color: #f8fafc !important;
-    color: var(--accent) !important;
-}
-.nav-horizontal-quick .dropdown-item.active,
-.nav-horizontal-quick .dropdown-item:active {
-    background-color: var(--accent) !important;
-    color: #ffffff !important;
+.modal-content {
+    background-color: var(--surface-modal) !important;
+    border: 1px solid var(--border-medium) !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7) !important;
+    border-radius: 14px;
+    color: var(--text-main);
 }
 
-/* High-Density Laptop Breakpoint (1366px, 1280px, 1024px) */
+.modal-header {
+    background-color: var(--surface-header) !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    color: var(--text-main);
+    padding: 14px 18px;
+}
+
+.modal-footer {
+    background-color: var(--surface-header) !important;
+    border-top: 1px solid var(--border-subtle) !important;
+    padding: 12px 18px;
+}
+
+.toast {
+    background-color: var(--surface-modal) !important;
+    border: 1px solid var(--border-medium) !important;
+    border-radius: 10px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6) !important;
+    color: var(--text-main);
+}
+
+/* Subtle Badges */
+.bg-success-subtle {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    color: #34d399 !important;
+}
+.bg-danger-subtle {
+    background-color: rgba(239, 68, 68, 0.15) !important;
+    color: #f87171 !important;
+}
+.bg-warning-subtle {
+    background-color: rgba(245, 158, 11, 0.15) !important;
+    color: #fbbf24 !important;
+}
+.bg-info-subtle {
+    background-color: rgba(6, 182, 212, 0.15) !important;
+    color: #38bdf8 !important;
+}
+.border-success { border-color: #10b981 !important; }
+.border-danger { border-color: #ef4444 !important; }
+
+/* ==========================================================================
+   POS CATALOG & CART LAYOUT
+   ========================================================================== */
+.pos-container {
+    height: calc(100vh - 85px);
+    overflow: hidden;
+}
+
+.cart-summary {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+}
+
+.catalog-row {
+    transition: background-color 0.15s ease;
+}
+.catalog-row:hover {
+    background-color: var(--surface-hover) !important;
+}
+
+/* ==========================================================================
+   CUSTOM DARK SCROLLBARS
+   ========================================================================== */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT RULES (100% Preserved)
+   ========================================================================== */
+@media (max-width: 991.98px) {
+    #sidebar {
+        margin-left: calc(-1 * var(--sidebar-width));
+        position: fixed;
+        height: 100vh;
+    }
+    #sidebar.open {
+        margin-left: 0;
+    }
+    #content {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+    .pos-container {
+        height: auto;
+        overflow: visible;
+    }
+    .cart-items {
+        max-height: 400px;
+    }
+}
+
 @media (max-width: 1400px) {
     body {
         font-size: 0.84rem;
@@ -762,7 +783,6 @@ input[type=number].currency-input,
     }
 }
 
-/* Short Vertical Height Screens (<= 800px e.g. 1366x768, 1280x720) */
 @media (max-height: 800px) {
     .container-fluid.main-page-container {
         padding: 8px 12px !important;
@@ -787,7 +807,6 @@ input[type=number].currency-input,
     }
 }
 
-/* Mobile & Small Tablet Tweaks (<= 768px) */
 @media (max-width: 767.98px) {
     .container-fluid.main-page-container {
         padding: 8px !important;
@@ -806,44 +825,190 @@ input[type=number].currency-input,
 
 /* ==========================================================================
    ENTERPRISE HIGH-CONTRAST THERMAL RECEIPT PRINTING (80mm / 78mm / 58mm)
-   Ensures pitch-black, bold, crisp output on Monochrome/Black & White Thermal Heads
+   STRICTLY MONOCHROME WHITE PAPER (#ffffff) AND PITCH BLACK INK (#000000)
    ========================================================================== */
+/* On-Screen Receipt Preview Styling (Inside Modals) */
+.receipt-print {
+    display: block;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11px;
+    line-height: 1.35;
+    color: #000000 !important;
+    background: #ffffff !important;
+    border: 1px dashed #cbd5e1;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.receipt-print * {
+    color: #000000 !important;
+}
+
+.receipt-print table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.receipt-print .center { text-align: center; }
+.receipt-print .right { text-align: right; }
+
+.receipt-logo {
+    max-width: 105px;
+    max-height: 105px;
+    width: auto;
+    height: auto;
+    margin: 0 auto 5px auto;
+    display: block;
+    object-fit: contain;
+}
+
+.receipt-divider {
+    border-top: 1.5px dashed #000000 !important;
+    margin: 4px 0 !important;
+    width: 100% !important;
+    height: 0 !important;
+}
+
+.receipt-divider-double {
+    border-top: 2.5px solid #000000 !important;
+    margin: 5px 0 !important;
+    width: 100% !important;
+    height: 0 !important;
+}
+
 @media print {
-    #thermalDirectPrintArea,
-    .thermal-receipt,
-    .receipt-container,
-    #receiptTemplateContainer,
-    #refundVoucherPrintContainer,
-    #exchangeVoucherPrintContainer {
-        color: #000000 !important;
-        font-family: Arial, "Helvetica Neue", Helvetica, sans-serif !important;
-        font-weight: 700 !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
+    @page {
+        size: 78mm auto;
+        margin: 0mm !important;
     }
 
-    #thermalDirectPrintArea *,
-    .thermal-receipt *,
-    .receipt-container *,
-    #receiptTemplateContainer *,
-    #refundVoucherPrintContainer *,
-    #exchangeVoucherPrintContainer * {
+    /* 1. Barcode sticker prints mode */
+    body.printing-barcodes {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+    }
+    body.printing-barcodes #content,
+    body.printing-barcodes .wrapper,
+    body.printing-barcodes .container-fluid,
+    body.printing-barcodes #thermalDirectPrintArea,
+    body.printing-barcodes .modal,
+    body.printing-barcodes .modal-backdrop {
+        display: none !important;
+    }
+    body.printing-barcodes #barcodePrintArea {
+        display: block !important;
+        background: #ffffff !important;
+        width: 100% !important;
+    }
+    .barcode-sticker {
+        width: 50mm;
+        height: 25mm;
+        padding: 1.5mm;
+        margin: 0 auto;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        font-size: 8px;
+        line-height: 1.1;
+        box-sizing: border-box;
+        page-break-after: always;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        overflow: hidden;
+        background: #ffffff !important;
         color: #000000 !important;
-        font-weight: 700 !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
+    }
+    .barcode-sticker svg {
+        max-width: 100%;
+        height: 10mm !important;
     }
 
-    .receipt-divider {
+    /* 2. Standard Business Reports Mode (P&L, Financials) */
+    body.printing-report {
+        width: 100% !important;
+        margin: 5mm auto !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+    }
+    body.printing-report * {
+        background: #ffffff !important;
+        color: #000000 !important;
+    }
+    body.printing-report #thermalDirectPrintArea {
+        display: none !important;
+    }
+    body.printing-report .wrapper,
+    body.printing-report #content,
+    body.printing-report #pnlReportCard {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    /* 3. High-Contrast Thermal Receipt Mode */
+    body:not(.printing-barcodes):not(.printing-report) {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        width: 78mm !important;
+        overflow: visible !important;
+    }
+    body:not(.printing-barcodes):not(.printing-report) .wrapper,
+    body:not(.printing-barcodes):not(.printing-report) .toast-container,
+    body:not(.printing-barcodes):not(.printing-report) .modal,
+    body:not(.printing-barcodes):not(.printing-report) .modal-backdrop,
+    body:not(.printing-barcodes):not(.printing-report) #sidebar,
+    body:not(.printing-barcodes):not(.printing-report) .navbar,
+    body:not(.printing-barcodes):not(.printing-report) .btn {
+        display: none !important;
+        height: 0 !important;
+        max-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        border: none !important;
+    }
+    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea {
+        display: block !important;
+        position: static !important;
+        width: 78mm !important;
+        max-width: 78mm !important;
+        margin: 0 auto !important;
+        padding: 4mm 3mm 6mm 3mm !important;
+        box-sizing: border-box !important;
+        font-family: 'Courier New', Courier, monospace !important;
+        font-size: 11px !important;
+        line-height: 1.3 !important;
+        color: #000000 !important;
+        background: #ffffff !important;
+        page-break-inside: avoid !important;
+    }
+    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea * {
+        color: #000000 !important;
+        background: transparent !important;
+        box-sizing: border-box !important;
+        font-weight: 700 !important;
+    }
+    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea table {
+        width: 100% !important;
+        font-size: 11px !important;
+        border-collapse: collapse !important;
+    }
+    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea .center {
+        text-align: center !important;
+    }
+    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea .right {
+        text-align: right !important;
+    }
+    body:not(.printing-barcodes):not(.printing-report) #thermalDirectPrintArea .receipt-divider {
         border-top: 1.5px dashed #000000 !important;
         margin: 4px 0 !important;
-        width: 100% !important;
-        height: 0 !important;
-    }
-
-    .receipt-divider-double {
-        border-top: 2.5px solid #000000 !important;
-        margin: 5px 0 !important;
         width: 100% !important;
         height: 0 !important;
     }

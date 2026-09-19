@@ -10,7 +10,7 @@ if (isLoggedIn()) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,57 +19,99 @@ if (isLoggedIn()) {
     <link rel="icon" type="image/png" href="<?= logoUrl() ?>">
     <link rel="shortcut icon" type="image/png" href="<?= logoUrl() ?>">
     <link rel="apple-touch-icon" href="<?= logoUrl() ?>">
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: radial-gradient(ellipse at 50% 20%, #1e293b 0%, #090d16 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #f8fafc;
+            padding: 1.5rem;
         }
         .login-card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            background-color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            background-color: rgba(17, 24, 39, 0.92);
+            backdrop-filter: blur(16px);
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
+            padding: 2.25rem 2rem;
         }
-        .btn-primary {
-            background-color: #d9534f;
-            border-color: #d9534f;
-            transition: all 0.2s ease-in-out;
-        }
-        .btn-primary:hover {
-            background-color: #c9302c;
-            border-color: #ac2925;
-        }
-        .form-control:focus {
-            border-color: #d9534f;
-            box-shadow: 0 0 0 0.25rem rgba(217, 83, 79, 0.25);
+        .login-logo {
+            max-width: 80px;
+            max-height: 80px;
+            object-fit: contain;
+            margin-bottom: 0.75rem;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
         }
         .login-header {
             text-align: center;
             margin-bottom: 2rem;
         }
         .login-header h3 {
-            color: #d9534f;
-            font-weight: 700;
+            color: #f8fafc;
+            font-weight: 800;
+            letter-spacing: 0.5px;
             margin-bottom: 0.25rem;
+            font-size: 1.45rem;
         }
         .login-header p {
-            color: #6c757d;
-            font-size: 0.9rem;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-bottom: 0;
+        }
+        .form-label {
+            color: #cbd5e1;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+        .form-control {
+            background-color: #0b1120;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            color: #ffffff;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        .form-control:focus {
+            background-color: #0d1527;
+            border-color: #ef4444;
+            color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 11px;
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover, .btn-primary:focus {
+            background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.45);
         }
     </style>
 </head>
 <body>
 
-<div class="card login-card p-4">
+<div class="card login-card">
     <div class="login-header">
+        <img src="<?= logoUrl() ?>" alt="Logo" class="login-logo">
         <h3><?= defined('STORE_NAME') ? strtoupper(STORE_NAME) : 'ONE DOLLAR SHOP' ?></h3>
         <p><?= defined('STORE_TAGLINE') ? STORE_TAGLINE : 'Retail Inventory & POS System' ?></p>
     </div>
@@ -79,15 +121,15 @@ if (isLoggedIn()) {
     <form id="loginForm">
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" name="username" required autocomplete="username">
+            <input type="text" class="form-control" id="username" name="username" required autocomplete="username" placeholder="Enter username">
         </div>
         <div class="mb-4">
             <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password">
+            <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password" placeholder="••••••••">
         </div>
         <div class="d-grid mb-2">
             <button type="submit" id="loginBtn" class="btn btn-primary btn-lg">
-                <span id="btnText">Login</span>
+                <span id="btnText">Sign In</span>
                 <span id="btnSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
             </button>
         </div>

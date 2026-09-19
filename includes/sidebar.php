@@ -2,9 +2,10 @@
 require_once __DIR__ . '/../config/auth.php';
 ?>
 <!-- Sidebar -->
-<nav id="sidebar" class="bg-dark text-white d-print-none">
-    <div class="sidebar-header p-3 border-bottom border-secondary">
-        <h5 class="mb-0 text-center text-danger font-weight-bold"><?= defined('STORE_NAME') ? strtoupper(STORE_NAME) : 'ONE DOLLAR SHOP' ?></h5>
+<nav id="sidebar" class="d-print-none">
+    <div class="sidebar-header p-3 text-center border-bottom" style="border-color: rgba(255,255,255,0.08) !important;">
+        <img src="<?= logoUrl() ?>" alt="Logo" style="max-height: 48px; max-width: 140px; object-fit: contain; margin-bottom: 6px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));">
+        <h6 class="mb-0 text-center text-danger fw-bold" style="letter-spacing: 0.5px;"><?= defined('STORE_NAME') ? strtoupper(STORE_NAME) : 'ONE DOLLAR SHOP' ?></h6>
     </div>
     
     <ul class="list-unstyled components p-3">

@@ -12,28 +12,29 @@ require_once __DIR__ . '/../includes/header.php';
 
 <style>
 /* =========================================================
-   100% MOBILE-FIRST & CLEAN ENTERPRISE STYLES
+   100% MOBILE-FIRST & CLEAN ENTERPRISE STYLES (DARK THEME)
    ========================================================= */
 :root {
-    --brand-red: #dc2626;
+    --brand-red: #ef4444;
     --brand-dark: #0f172a;
-    --brand-green: #16a34a;
-    --brand-amber: #d97706;
-    --brand-blue: #2563eb;
+    --brand-green: #10b981;
+    --brand-amber: #f59e0b;
+    --brand-blue: #3b82f6;
     --card-radius: 16px;
 }
 
 body {
-    background-color: #f8fafc;
+    background-color: var(--bg-canvas, #090d16);
+    color: var(--text-main, #f8fafc);
     overflow-x: hidden;
 }
 
 /* Base Card Style */
 .dash-card {
-    background: #ffffff;
+    background: var(--surface-card, #111827);
     border-radius: var(--card-radius);
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    border: 1px solid var(--border-subtle, rgba(255,255,255,0.08));
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -62,9 +63,9 @@ body {
     padding: 7px 16px;
     font-size: 0.85rem;
     font-weight: 600;
-    border: 1px solid #cbd5e1;
-    background: #ffffff;
-    color: #475569;
+    border: 1px solid var(--border-subtle, rgba(255,255,255,0.12));
+    background: var(--surface-input, #0b1120);
+    color: var(--text-secondary, #cbd5e1);
     flex-shrink: 0;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -73,26 +74,27 @@ body {
     gap: 6px;
 }
 .pill-btn:hover {
-    background: #f1f5f9;
-    color: #0f172a;
+    background: var(--surface-hover, rgba(255,255,255,0.06));
+    color: #ffffff;
+    border-color: var(--border-medium, rgba(255,255,255,0.2));
 }
 .pill-btn.active {
-    background: #0f172a;
+    background: var(--accent, #ef4444);
     color: #ffffff;
-    border-color: #0f172a;
-    box-shadow: 0 2px 8px rgba(15,23,42,0.2);
+    border-color: var(--accent, #ef4444);
+    box-shadow: 0 2px 10px rgba(239,68,68,0.35);
 }
 
 /* 4 Core KPI Cards */
 .kpi-tile {
     border-radius: 16px;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
+    background: var(--surface-card, #111827);
+    border: 1px solid var(--border-subtle, rgba(255,255,255,0.08));
     padding: 14px 14px 12px 14px;
     height: 100%;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 .kpi-tile::before {
     content: '';
@@ -105,11 +107,11 @@ body {
 .tile-blue::before { background: var(--brand-blue); }
 .tile-orange::before { background: #f97316; }
 .tile-green::before { background: var(--brand-green); }
-.tile-purple::before { background: #7c3aed; }
+.tile-purple::before { background: #a855f7; }
 .tile-amber::before { background: var(--brand-amber); }
-.tile-teal::before { background: #0891b2; }
+.tile-teal::before { background: #06b6d4; }
 .tile-red::before { background: var(--brand-red); }
-.tile-emerald::before { background: #059669; }
+.tile-emerald::before { background: #10b981; }
 
 @media (min-width: 1400px) {
     .col-xxl-7th {
@@ -122,7 +124,7 @@ body {
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
-    color: #64748b;
+    color: var(--text-muted, #94a3b8);
     margin-bottom: 4px;
     display: flex;
     align-items: center;
@@ -133,6 +135,7 @@ body {
     font-weight: 800;
     letter-spacing: -0.5px;
     margin-bottom: 4px;
+    color: #ffffff;
     font-family: system-ui, -apple-system, monospace;
 }
 @media (min-width: 768px) {
@@ -141,7 +144,7 @@ body {
 }
 .kpi-sub {
     font-size: 0.72rem;
-    color: #64748b;
+    color: var(--text-muted, #94a3b8);
     line-height: 1.3;
 }
 
@@ -151,7 +154,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 8px 0;
-    border-bottom: 1px dashed #e2e8f0;
+    border-bottom: 1px dashed var(--border-subtle, rgba(255,255,255,0.1));
     font-size: 0.88rem;
 }
 .receipt-line:last-child {
@@ -166,18 +169,20 @@ body {
     justify-content: center;
     padding: 14px 8px;
     border-radius: 14px;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
+    background: var(--surface-card, #111827);
+    border: 1px solid var(--border-subtle, rgba(255,255,255,0.08));
     text-decoration: none;
-    color: #1e293b;
+    color: var(--text-main, #f8fafc);
     text-align: center;
     height: 100%;
     transition: all 0.2s ease;
 }
 .app-tile-btn:hover {
     transform: translateY(-2px);
-    border-color: #fca5a5;
-    box-shadow: 0 4px 12px rgba(220,38,38,0.08);
+    border-color: var(--accent, #ef4444);
+    box-shadow: 0 6px 16px rgba(239,68,68,0.18);
+    color: #ffffff;
+}
     color: var(--brand-red);
 }
 .app-tile-icon {

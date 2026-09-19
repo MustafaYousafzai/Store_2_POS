@@ -4,7 +4,7 @@ require_once __DIR__ . '/../config/helper.php';
 requireLogin();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,7 +38,7 @@ requireLogin();
     <!-- JsBarcode (Standard Barcode Renderer) -->
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 </head>
-<body>
+<body class="dark-theme">
 
 <!-- Global Toast Container -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1200;">
@@ -244,17 +244,17 @@ window.printThermalReceipt = function(htmlContent) {
     <!-- Main Content Container -->
     <div id="content" class="w-100">
         <!-- Top Navbar -->
-        <nav class="navbar navbar-light bg-white border-bottom px-2 px-md-3 py-1 py-md-2 d-print-none">
+        <nav class="navbar navbar-dark bg-dark-header border-bottom px-2 px-md-3 py-1 py-md-2 d-print-none">
             <div class="container-fluid px-0 d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div class="d-flex align-items-center flex-wrap gap-2 me-auto">
                     <button type="button" id="sidebarCollapse" class="btn btn-outline-secondary px-2 py-1" title="Toggle Navigation Sidebar">
                         <i class="fas fa-align-left"></i>
                     </button>
-                    <h4 class="mb-0 text-dark font-weight-bold fs-6 fs-md-5 text-truncate" style="max-width: 280px;"><?= defined('STORE_NAME') ? STORE_NAME : 'One Dollar Shop' ?></h4>
+                    <h4 class="mb-0 text-light font-weight-bold fs-6 fs-md-5 text-truncate" style="max-width: 280px;"><?= defined('STORE_NAME') ? STORE_NAME : 'One Dollar Shop' ?></h4>
                 </div>
                 <div class="d-flex align-items-center gap-1 gap-md-2 flex-wrap ms-auto">
                     <?php if (hasPermission('MANAGE_KHATA') || hasPermission('CREATE_SALE') || isAdmin()): ?>
-                    <a href="<?= url('/khata/index.php') ?>" class="btn btn-outline-warning btn-sm fw-bold shadow-sm text-dark px-2 px-md-3 rounded-pill text-nowrap" title="Open Customer Khata Register">
+                    <a href="<?= url('/khata/index.php') ?>" class="btn btn-outline-warning btn-sm fw-bold shadow-sm px-2 px-md-3 rounded-pill text-nowrap" title="Open Customer Khata Register">
                         <i class="fas fa-book-bookmark text-warning me-1"></i> <span class="d-none d-sm-inline">Khata (Udhar)</span><span class="d-inline d-sm-none">Khata</span>
                     </a>
                     <?php endif; ?>
@@ -264,7 +264,7 @@ window.printThermalReceipt = function(htmlContent) {
                     </a>
                     <?php endif; ?>
                     <div class="dropdown ms-1">
-                        <a class="nav-link dropdown-toggle text-dark font-weight-bold py-1 px-1 px-md-2 text-nowrap" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle text-light font-weight-bold py-1 px-1 px-md-2 text-nowrap" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user-circle me-1 text-secondary"></i> <span class="d-none d-md-inline"><?php echo htmlspecialchars($_SESSION['username']); ?> (<?php echo ($_SESSION['role'] === 'admin') ? 'Admin' : 'Cashier'; ?>)</span><span class="d-inline d-md-none"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userDropdown" style="z-index: 1070;">
