@@ -256,22 +256,29 @@ $(document).ready(function() {
         }
     });
 
-    // Add product to cart logic (Auto-increments duplicate items seamlessly)
+    // Add product to cart logic (Places newest/re-scanned items at the TOP of the cart)
     function addToCart(product) {
-        const existing = cart.find(item => item.product_id == product.product_id);
+        const existingIndex = cart.findIndex(item => item.product_id == product.product_id);
         
-        if (existing) {
+        if (existingIndex !== -1) {
+            const existing = cart[existingIndex];
             if (existing.quantity + 1 > product.stock_qty) {
                 showToast(`Insufficient stock for "${product.name}"! Max available: ${product.stock_qty}`, 'danger');
                 return false;
             }
             existing.quantity += 1;
+            // Elevate the scanned item to the TOP of the cart for instant visual focus
+            if (existingIndex > 0) {
+                const [movedItem] = cart.splice(existingIndex, 1);
+                cart.unshift(movedItem);
+            }
         } else {
             if (product.stock_qty <= 0) {
                 showToast(`"${product.name}" is out of stock! Available: 0`, 'danger');
                 return false;
             }
-            cart.push({
+            // Add NEW item to the very TOP of the cart
+            cart.unshift({
                 product_id: product.product_id,
                 name: product.name,
                 barcode: product.barcode,
@@ -322,9 +329,9 @@ $(document).ready(function() {
             const isHighlight = (highlightProductId && item.product_id == highlightProductId);
             
             html += `
-                <tr data-index="${index}" data-product-id="${item.product_id}" class="${isHighlight ? 'table-success scan-highlight' : ''}">
+                <tr data-index="${index}" data-product-id="${item.product_id}" class="${isHighlight ? 'table-success scan-highlight cart-row-new' : ''}">
                     <td>
-                        <strong class="text-dark">${item.name}</strong><br>
+                        <strong class="text-light">${item.name}</strong><br>
                         <small class="text-secondary font-monospace" style="font-size: 0.75rem;">${item.barcode}</small>
                     </td>
                     <td class="text-end">
@@ -352,9 +359,14 @@ $(document).ready(function() {
         calculateTotals(subtotal);
 
         if (highlightProductId) {
+            // Smoothly ensure the top of the cart table is visible for the newly added/re-scanned item
+            const $wrapper = $('.pos-cart-table-wrapper');
+            if ($wrapper.length) {
+                $wrapper.scrollTop(0);
+            }
             setTimeout(() => {
-                $(`#cartTableBody tr[data-product-id="${highlightProductId}"]`).removeClass('table-success scan-highlight');
-            }, 600);
+                $(`#cartTableBody tr[data-product-id="${highlightProductId}"]`).removeClass('table-success scan-highlight cart-row-new');
+            }, 750);
         }
     }
 

@@ -701,6 +701,22 @@ input[type=number].currency-input,
     background-color: var(--surface-hover) !important;
 }
 
+/* Tactile New Item Entrance & Re-scan Highlight */
+@keyframes cartRowSlideDown {
+    from {
+        opacity: 0.2;
+        transform: translateY(-8px);
+        background-color: rgba(16, 185, 129, 0.35) !important;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.cart-row-new {
+    animation: cartRowSlideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 /* ==========================================================================
    CUSTOM DARK SCROLLBARS
    ========================================================================== */
