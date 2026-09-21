@@ -138,6 +138,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             sendJSON(['success' => false, 'message' => 'Product not found.']);
         }
     }
+
+    else if ($action === 'check_barcode') {
+        requirePermission('MANAGE_INVENTORY');
+        
+        $barcode = isset($_GET['barcode']) ? trim(sanitize($_GET['barcode'])) : '';
+        $exclude_id = isset($_GET['exclude_id']) ? (int)$_GET['exclude_id'] : 0;
+        
+        if (empty($barcode)) {
+            sendJSON(['success' => true, 'exists' => false]);
+        }
+        
+        $stmt = $db->prepare("
+            SELECT p.id, p.name, p.barcode, p.selling_price, p.quantity, c.name AS category_name 
+            FROM products p 
+            LEFT JOIN categories c ON p.category_id = c.id 
+            WHERE p.barcode = ? AND p.id != ? 
+            LIMIT 1
+        ");
+        $stmt->execute([$barcode, $exclude_id]);
+        $product = $stmt->fetch();
+        
+        if ($product) {
+            sendJSON([
+                'success' => true,
+                'exists' => true,
+                'product' => [
+                    'id' => (int)$product['id'],
+                    'name' => $product['name'],
+                    'barcode' => $product['barcode'],
+                    'selling_price' => (float)$product['selling_price'],
+                    'quantity' => (int)$product['quantity'],
+                    'category_name' => $product['category_name'] ?? 'Uncategorized'
+                ]
+            ]);
+        } else {
+            sendJSON(['success' => true, 'exists' => false]);
+        }
+    }
 } 
 
 else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -178,11 +216,34 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         } else {
-            // Validate barcode uniqueness
-            $chk = $db->prepare("SELECT COUNT(*) FROM products WHERE barcode = ?");
+            // Validate barcode uniqueness and fetch conflicting product details
+            $chk = $db->prepare("
+                SELECT p.id, p.name, p.barcode, p.selling_price, p.quantity, c.name AS category_name 
+                FROM products p 
+                LEFT JOIN categories c ON p.category_id = c.id 
+                WHERE p.barcode = ? 
+                LIMIT 1
+            ");
             $chk->execute([$barcode]);
-            if ($chk->fetchColumn() > 0) {
-                sendJSON(['success' => false, 'message' => 'Barcode already exists in the system.'], 400);
+            $existingProduct = $chk->fetch();
+            if ($existingProduct) {
+                $categoryText = !empty($existingProduct['category_name']) ? " (Category: {$existingProduct['category_name']})" : "";
+                $priceText = isset($existingProduct['selling_price']) ? ", Price: Rs. " . number_format($existingProduct['selling_price'], 2) : "";
+                $stockText = isset($existingProduct['quantity']) ? ", Stock: " . $existingProduct['quantity'] . " units" : "";
+                $message = "Barcode '{$barcode}' already exists in the system. It is currently associated with: \"{$existingProduct['name']}\"{$categoryText}{$priceText}{$stockText}.";
+                
+                sendJSON([
+                    'success' => false, 
+                    'message' => $message,
+                    'conflict_product' => [
+                        'id' => (int)$existingProduct['id'],
+                        'name' => $existingProduct['name'],
+                        'barcode' => $existingProduct['barcode'],
+                        'selling_price' => (float)$existingProduct['selling_price'],
+                        'quantity' => (int)$existingProduct['quantity'],
+                        'category_name' => $existingProduct['category_name'] ?? 'Uncategorized'
+                    ]
+                ], 400);
             }
         }
         
@@ -275,11 +336,34 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             sendJSON(['success' => false, 'message' => 'Invalid product parameters.'], 400);
         }
         
-        // Check barcode uniqueness for other products
-        $chk = $db->prepare("SELECT COUNT(*) FROM products WHERE barcode = ? AND id != ?");
+        // Check barcode uniqueness for other products and fetch conflicting product details
+        $chk = $db->prepare("
+            SELECT p.id, p.name, p.barcode, p.selling_price, p.quantity, c.name AS category_name 
+            FROM products p 
+            LEFT JOIN categories c ON p.category_id = c.id 
+            WHERE p.barcode = ? AND p.id != ? 
+            LIMIT 1
+        ");
         $chk->execute([$barcode, $id]);
-        if ($chk->fetchColumn() > 0) {
-            sendJSON(['success' => false, 'message' => 'Barcode already assigned to another product.'], 400);
+        $existingProduct = $chk->fetch();
+        if ($existingProduct) {
+            $categoryText = !empty($existingProduct['category_name']) ? " (Category: {$existingProduct['category_name']})" : "";
+            $priceText = isset($existingProduct['selling_price']) ? ", Price: Rs. " . number_format($existingProduct['selling_price'], 2) : "";
+            $stockText = isset($existingProduct['quantity']) ? ", Stock: " . $existingProduct['quantity'] . " units" : "";
+            $message = "Barcode '{$barcode}' already assigned to another product: \"{$existingProduct['name']}\"{$categoryText}{$priceText}{$stockText}.";
+            
+            sendJSON([
+                'success' => false, 
+                'message' => $message,
+                'conflict_product' => [
+                    'id' => (int)$existingProduct['id'],
+                    'name' => $existingProduct['name'],
+                    'barcode' => $existingProduct['barcode'],
+                    'selling_price' => (float)$existingProduct['selling_price'],
+                    'quantity' => (int)$existingProduct['quantity'],
+                    'category_name' => $existingProduct['category_name'] ?? 'Uncategorized'
+                ]
+            ], 400);
         }
         
         // Fetch current product state

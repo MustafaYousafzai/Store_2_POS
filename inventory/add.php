@@ -30,6 +30,7 @@ requirePermission('MANAGE_INVENTORY');
                                 <button type="button" class="btn btn-outline-secondary" id="generateBarcodeBtn"><i class="fas fa-barcode"></i> Generate</button>
                             </div>
                             <small class="text-muted">Supports EAN-13, UPC-A, Code-128, etc.</small>
+                            <div id="barcodeFeedback" class="mt-1 small d-none"></div>
                         </div>
                         
                         <!-- Category with Inline Add Button -->
@@ -179,11 +180,71 @@ $(document).ready(function() {
         });
     });
     
+    // Live barcode uniqueness check
+    let barcodeCheckTimeout = null;
+    function checkBarcodeAvailability() {
+        const barcodeVal = $('#barcode').val().trim();
+        const feedbackEl = $('#barcodeFeedback');
+        const inputEl = $('#barcode');
+        
+        if (!barcodeVal) {
+            inputEl.removeClass('is-invalid is-valid');
+            feedbackEl.addClass('d-none').empty();
+            return;
+        }
+        
+        $.ajax({
+            url: (window.BASE_URL || '') + '/api/products.php?action=check_barcode',
+            type: 'GET',
+            data: { barcode: barcodeVal },
+            dataType: 'json',
+            success: function(res) {
+                if (res.success && res.exists && res.product) {
+                    inputEl.addClass('is-invalid').removeClass('is-valid');
+                    const p = res.product;
+                    const cat = p.category_name || 'Uncategorized';
+                    const price = parseFloat(p.selling_price || 0).toFixed(2);
+                    feedbackEl.html(`
+                        <div class="p-2 rounded bg-danger-subtle border border-danger-subtle text-danger-emphasis">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-1">
+                                <div>
+                                    <i class="fas fa-triangle-exclamation me-1 text-danger"></i>
+                                    <strong>Already in use:</strong> "${window.escapeHtml(p.name)}" 
+                                    <span class="badge bg-white text-dark border ms-1">${window.escapeHtml(cat)}</span>
+                                    <span class="ms-1 font-monospace fw-bold text-danger">Rs. ${price}</span>
+                                    <span class="ms-1 text-muted small">(Stock: ${p.quantity})</span>
+                                </div>
+                                <a href="${window.BASE_URL || ''}/inventory/edit.php?id=${p.id}" target="_blank" class="btn btn-xs btn-outline-danger py-0 px-2 fw-bold text-nowrap">
+                                    <i class="fas fa-arrow-up-right-from-square me-1"></i>Edit Existing
+                                </a>
+                            </div>
+                        </div>
+                    `).removeClass('d-none');
+                } else if (res.success && !res.exists) {
+                    inputEl.addClass('is-valid').removeClass('is-invalid');
+                    feedbackEl.html(`
+                        <span class="text-success fw-semibold small">
+                            <i class="fas fa-check-circle me-1"></i> Barcode is available
+                        </span>
+                    `).removeClass('d-none');
+                }
+            }
+        });
+    }
+
+    $('#barcode').on('input', function() {
+        clearTimeout(barcodeCheckTimeout);
+        barcodeCheckTimeout = setTimeout(checkBarcodeAvailability, 300);
+    }).on('change blur', function() {
+        clearTimeout(barcodeCheckTimeout);
+        checkBarcodeAvailability();
+    });
+
     // Add product submit
     $('#addProductForm').on('submit', function(e) {
         e.preventDefault();
         
-        $('#addAlert').addClass('d-none');
+        $('#addAlert').addClass('d-none').empty();
         $('#addSuccess').addClass('d-none');
         
         $.ajax({
@@ -203,10 +264,39 @@ $(document).ready(function() {
             },
             error: function(xhr) {
                 let msg = 'Server error occurred.';
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                    msg = xhr.responseJSON.message;
+                if (xhr.responseJSON && xhr.responseJSON.conflict_product) {
+                    const c = xhr.responseJSON.conflict_product;
+                    const cat = c.category_name || 'Uncategorized';
+                    const price = parseFloat(c.selling_price || 0).toFixed(2);
+                    $('#addAlert').html(`
+                        <div class="d-flex align-items-start gap-2 text-start">
+                            <i class="fas fa-triangle-exclamation text-danger fs-4 mt-1 flex-shrink-0"></i>
+                            <div class="flex-grow-1">
+                                <strong class="d-block text-danger fs-6 mb-1">Barcode Conflict Detected!</strong>
+                                <p class="mb-2 text-dark">Barcode <code class="fw-bold px-1.5 py-0.5 rounded bg-light text-danger border">${window.escapeHtml(c.barcode)}</code> is already associated with an existing product:</p>
+                                <div class="p-2.5 rounded bg-white border border-danger-subtle text-dark shadow-sm">
+                                    <div class="fw-bold text-danger fs-6 mb-1">${window.escapeHtml(c.name)}</div>
+                                    <div class="small text-muted d-flex flex-wrap gap-3">
+                                        <span><i class="fas fa-tag me-1 text-secondary"></i>Category: <strong class="text-dark">${window.escapeHtml(cat)}</strong></span>
+                                        <span><i class="fas fa-money-bill-wave me-1 text-success"></i>Price: <strong class="text-dark font-monospace">Rs. ${price}</strong></span>
+                                        <span><i class="fas fa-boxes-stacked me-1 text-primary"></i>Stock: <strong class="text-dark">${c.quantity} units</strong></span>
+                                    </div>
+                                </div>
+                                <div class="mt-2.5 d-flex gap-2 align-items-center flex-wrap">
+                                    <a href="${window.BASE_URL || ''}/inventory/edit.php?id=${c.id}" target="_blank" class="btn btn-sm btn-danger px-3 py-1 fw-bold rounded-pill shadow-sm">
+                                        <i class="fas fa-pen-to-square me-1"></i> Edit "${window.escapeHtml(c.name)}"
+                                    </a>
+                                    <span class="small text-muted">or choose a different barcode.</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).removeClass('d-none');
+                    $('#barcode').addClass('is-invalid');
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    $('#addAlert').text(xhr.responseJSON.message).removeClass('d-none');
+                } else {
+                    $('#addAlert').text(msg).removeClass('d-none');
                 }
-                $('#addAlert').text(msg).removeClass('d-none');
             }
         });
     });
