@@ -135,7 +135,7 @@ body {
     font-weight: 800;
     letter-spacing: -0.5px;
     margin-bottom: 4px;
-    color: #ffffff;
+    color: var(--text-main, #f8fafc);
     font-family: system-ui, -apple-system, monospace;
 }
 @media (min-width: 768px) {
@@ -181,9 +181,7 @@ body {
     transform: translateY(-2px);
     border-color: var(--accent, #ef4444);
     box-shadow: 0 6px 16px rgba(239,68,68,0.18);
-    color: #ffffff;
-}
-    color: var(--brand-red);
+    color: var(--accent, #ef4444);
 }
 .app-tile-icon {
     width: 44px;

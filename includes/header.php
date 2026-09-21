@@ -8,6 +8,13 @@ requireLogin();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function() {
+            var theme = localStorage.getItem('pos_theme') || 'dark';
+            document.documentElement.setAttribute('data-bs-theme', theme);
+            document.documentElement.classList.add(theme + '-theme');
+        })();
+    </script>
     <title><?= defined('STORE_NAME') ? STORE_NAME : 'One Dollar Shop' ?> - Business Management</title>
     <!-- Favicon (Browser Tab Icon) -->
     <link rel="icon" type="image/png" href="<?= logoUrl() ?>">
@@ -39,6 +46,13 @@ requireLogin();
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 </head>
 <body class="dark-theme">
+<script>
+    (function() {
+        var theme = localStorage.getItem('pos_theme') || 'dark';
+        document.body.classList.remove('dark-theme', 'light-theme');
+        document.body.classList.add(theme + '-theme');
+    })();
+</script>
 
 <!-- Global Toast Container -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1200;">
@@ -263,6 +277,14 @@ window.printThermalReceipt = function(htmlContent) {
                         <i class="fas fa-cash-register me-1"></i> POS
                     </a>
                     <?php endif; ?>
+
+                    <!-- Modern Tactile Theme Switcher Button -->
+                    <button type="button" id="themeToggleBtn" class="theme-toggle-btn ms-1" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
+                        <i class="fas fa-sun theme-icon-sun text-warning d-none"></i>
+                        <i class="fas fa-moon theme-icon-moon text-info"></i>
+                        <span class="theme-text d-none d-lg-inline fs-7">Theme</span>
+                    </button>
+
                     <div class="dropdown ms-1">
                         <a class="nav-link dropdown-toggle text-light font-weight-bold py-1 px-1 px-md-2 text-nowrap" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user-circle me-1 text-secondary"></i> <span class="d-none d-md-inline"><?php echo htmlspecialchars($_SESSION['username']); ?> (<?php echo ($_SESSION['role'] === 'admin') ? 'Admin' : 'Cashier'; ?>)</span><span class="d-inline d-md-none"><?php echo htmlspecialchars($_SESSION['username']); ?></span>

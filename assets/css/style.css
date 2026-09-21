@@ -1,13 +1,73 @@
 /* ==========================================================================
-   ONE DOLLAR SHOP - ULTRA-MODERN DARK THEME (SaaS POS SYSTEM)
-   Architected for High Contrast, Eye Comfort & Pristine Thermal Printing
+   ONE DOLLAR SHOP - DUAL THEME ARCHITECTURE (LUXURY LIGHT & MIDNIGHT DARK)
+   Engineered for High Contrast, Eye Comfort & Pristine Thermal Printing
    Font: Inter (Google Fonts)
    ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   1. ELEGANT MODERN LIGHT THEME (Default / Light Mode)
+   -------------------------------------------------------------------------- */
 :root,
+[data-bs-theme="light"],
+body.light-theme {
+    /* Core Surfaces & Elevation */
+    --bg-canvas: #f8fafc;          /* Crisp serene slate canvas */
+    --bg-main: #f8fafc;            /* Compatibility alias */
+    --surface-card: #ffffff;       /* Pure white 1st tier card */
+    --surface-header: #ffffff;     /* Headers & table heads */
+    --surface-modal: #ffffff;      /* Modal surface */
+    --surface-input: #ffffff;      /* Input background */
+    --surface-hover: #f1f5f9;      /* Smooth slate-100 micro-interaction */
+    --surface-active: rgba(239, 68, 68, 0.08); /* Brand active tint */
+
+    /* Border & Divider System */
+    --border-subtle: #e2e8f0;      /* Slate-200 hairline border */
+    --border-medium: #cbd5e1;      /* Slate-300 input / card outline */
+    --border-strong: #94a3b8;      /* Slate-400 focus outline */
+    --card-border: #e2e8f0;        /* Compatibility alias */
+
+    /* Typography & Text Hierarchy */
+    --text-main: #0f172a;          /* Rich Slate-900 */
+    --text-secondary: #334155;     /* Slate-700 */
+    --text-muted: #64748b;         /* Slate-500 */
+    --text-dim: #94a3b8;           /* Slate-400 */
+
+    /* Signature Brand Accents */
+    --primary: #0f172a;            /* Midnight Slate */
+    --primary-light: #f1f5f9;      /* Slate-100 */
+    --accent: #ef4444;             /* Radiant Crimson Coral */
+    --accent-hover: #dc2626;       /* Deep Crimson */
+    --accent-glow: rgba(239, 68, 68, 0.22);
+    --accent-subtle: rgba(239, 68, 68, 0.08);
+
+    /* Semantic Colors */
+    --color-success: #059669;
+    --color-warning: #d97706;
+    --color-info: #0284c7;
+    --color-purple: #9333ea;
+
+    /* Layout Constants */
+    --sidebar-width: 260px;
+
+    /* Bootstrap 5.3 Light Overrides */
+    --bs-body-bg: var(--bg-canvas);
+    --bs-body-color: var(--text-main);
+    --bs-card-bg: var(--surface-card);
+    --bs-card-border-color: var(--border-subtle);
+    --bs-card-cap-bg: var(--surface-header);
+    --bs-border-color: var(--border-subtle);
+    --bs-tertiary-bg: #f8fafc;
+    --bs-secondary-bg: #f1f5f9;
+    --bs-modal-bg: var(--surface-modal);
+    --bs-modal-border-color: var(--border-medium);
+}
+
+/* --------------------------------------------------------------------------
+   2. ULTRA-MODERN MIDNIGHT DARK THEME (Obsidian Dark Mode)
+   -------------------------------------------------------------------------- */
 [data-bs-theme="dark"],
 body.dark-theme {
-    /* 1. Core Surfaces & Elevation Hierarchy */
+    /* Core Surfaces & Elevation Hierarchy */
     --bg-canvas: #090d16;          /* Deepest midnight canvas */
     --bg-main: #090d16;            /* Compatibility alias */
     --surface-card: #111827;       /* 1st Tier Card Surface (Slate-900) */
@@ -17,19 +77,19 @@ body.dark-theme {
     --surface-hover: rgba(255, 255, 255, 0.05); /* Luminous micro-interaction */
     --surface-active: rgba(239, 68, 68, 0.15);  /* Subtle accent tint */
 
-    /* 2. Border & Divider System */
+    /* Border & Divider System */
     --border-subtle: rgba(255, 255, 255, 0.08); /* Delicate boundary */
     --border-medium: rgba(255, 255, 255, 0.14); /* Input / Card outline */
     --border-strong: rgba(255, 255, 255, 0.24); /* Focus / Active outline */
     --card-border: rgba(255, 255, 255, 0.08);   /* Compatibility alias */
 
-    /* 3. Typography & Text Hierarchy */
+    /* Typography & Text Hierarchy */
     --text-main: #f8fafc;          /* High contrast Slate-50 */
     --text-secondary: #cbd5e1;     /* Slate-300 */
     --text-muted: #94a3b8;         /* Slate-400 */
     --text-dim: #64748b;           /* Slate-500 */
 
-    /* 4. Signature Brand Accents */
+    /* Signature Brand Accents */
     --primary: #0f172a;            /* Midnight Slate */
     --primary-light: #1e293b;      /* Slate-800 */
     --accent: #ef4444;             /* Radiant Crimson Coral */
@@ -37,13 +97,13 @@ body.dark-theme {
     --accent-glow: rgba(239, 68, 68, 0.35);
     --accent-subtle: rgba(239, 68, 68, 0.12);
 
-    /* 5. Semantic Color Tints */
+    /* Semantic Color Tints */
     --color-success: #10b981;
     --color-warning: #f59e0b;
     --color-info: #06b6d4;
     --color-purple: #a855f7;
 
-    /* 6. Layout Constants */
+    /* Layout Constants */
     --sidebar-width: 260px;
 
     /* Bootstrap 5.3 Dark Variable Overrides */
@@ -116,6 +176,367 @@ body.dark-theme .border-start,
 [data-bs-theme="dark"] .border-end,
 [data-bs-theme="dark"] .border-start {
     border-color: var(--border-subtle) !important;
+}
+
+/* Auto-map legacy light utility classes across Light Theme */
+body.light-theme .bg-white,
+[data-bs-theme="light"] .bg-white {
+    background-color: var(--surface-card) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+body.light-theme .bg-light,
+[data-bs-theme="light"] .bg-light {
+    background-color: #f1f5f9 !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+body.light-theme .text-dark,
+[data-bs-theme="light"] .text-dark,
+body.light-theme .text-slate,
+[data-bs-theme="light"] .text-slate {
+    color: var(--text-main) !important;
+}
+
+body.light-theme .text-secondary,
+[data-bs-theme="light"] .text-secondary {
+    color: var(--text-secondary) !important;
+}
+
+body.light-theme .text-muted,
+[data-bs-theme="light"] .text-muted {
+    color: var(--text-muted) !important;
+}
+
+body.light-theme .border,
+body.light-theme .border-bottom,
+body.light-theme .border-top,
+body.light-theme .border-end,
+body.light-theme .border-start,
+[data-bs-theme="light"] .border,
+[data-bs-theme="light"] .border-bottom,
+[data-bs-theme="light"] .border-top,
+[data-bs-theme="light"] .border-end,
+[data-bs-theme="light"] .border-start {
+    border-color: var(--border-subtle) !important;
+}
+
+/* Light Theme: Sidebar Overrides */
+body.light-theme #sidebar {
+    background-color: #ffffff !important;
+    border-right: 1px solid var(--border-subtle) !important;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.03);
+}
+
+body.light-theme #sidebar .sidebar-header {
+    background-color: #f8fafc !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+}
+
+body.light-theme #sidebar .sidebar-header h3 {
+    color: var(--text-main) !important;
+}
+
+body.light-theme #sidebar ul li a {
+    color: #475569 !important;
+}
+
+body.light-theme #sidebar ul li a:hover {
+    color: #0f172a !important;
+    background-color: #f1f5f9 !important;
+}
+
+body.light-theme #sidebar ul li.active > a, 
+body.light-theme #sidebar ul li a:focus {
+    color: #ffffff !important;
+    background-color: var(--accent) !important;
+    box-shadow: 0 4px 12px var(--accent-glow) !important;
+}
+
+body.light-theme .bg-secondary-dark {
+    background-color: #f8fafc !important;
+}
+
+body.light-theme #sidebarBackdrop {
+    background: rgba(15, 23, 42, 0.35);
+}
+
+/* Light Theme: Top Navbar & Quick Navigation */
+body.light-theme .navbar,
+body.light-theme .bg-dark-header {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-theme .navbar h4 {
+    color: #0f172a !important;
+}
+
+body.light-theme .navbar .btn-outline-secondary {
+    border-color: var(--border-medium) !important;
+    color: #475569 !important;
+}
+
+body.light-theme .navbar .btn-outline-secondary:hover {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: var(--border-strong) !important;
+}
+
+body.light-theme .navbar .nav-link {
+    color: #334155 !important;
+}
+
+body.light-theme .quick-nav-card {
+    background-color: #ffffff !important;
+    border-color: var(--border-subtle) !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.light-theme .nav-horizontal-quick .nav-link {
+    background-color: #f8fafc !important;
+    border-color: var(--border-subtle) !important;
+    color: #475569 !important;
+}
+
+body.light-theme .nav-horizontal-quick .nav-link:hover {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: var(--border-medium) !important;
+}
+
+body.light-theme .nav-horizontal-quick .nav-link.active {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 3px 10px var(--accent-glow) !important;
+}
+
+body.light-theme .dropdown-menu {
+    background-color: #ffffff !important;
+    border: 1px solid var(--border-subtle) !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.09) !important;
+}
+
+body.light-theme .dropdown-item {
+    color: #334155 !important;
+}
+
+body.light-theme .dropdown-item:hover {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+}
+
+body.light-theme .dropdown-item.active {
+    background-color: var(--accent) !important;
+    color: #ffffff !important;
+}
+
+/* Light Theme: Cards, Tables, Forms, Modals & Components */
+body.light-theme .card {
+    background-color: #ffffff !important;
+    border-color: var(--border-subtle) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+}
+
+body.light-theme .card-header {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    color: var(--text-main) !important;
+}
+
+body.light-theme .card-footer {
+    background-color: #f8fafc !important;
+    border-top: 1px solid var(--border-subtle) !important;
+}
+
+body.light-theme .table {
+    color: var(--text-main) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+body.light-theme .table th {
+    background-color: #f8fafc !important;
+    color: #475569 !important;
+    border-bottom: 1px solid var(--border-medium) !important;
+}
+
+body.light-theme .table td {
+    color: var(--text-main) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+body.light-theme .table-hover tbody tr:hover {
+    background-color: #f1f5f9 !important;
+}
+
+body.light-theme .table-light,
+body.light-theme .table-dark-sticky {
+    background-color: #f8fafc !important;
+    color: #334155 !important;
+    border-color: var(--border-subtle) !important;
+}
+
+body.light-theme .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #fafbfc;
+}
+
+body.light-theme .form-control,
+body.light-theme .form-select {
+    background-color: #ffffff !important;
+    border: 1px solid var(--border-medium) !important;
+    color: var(--text-main) !important;
+}
+
+body.light-theme .form-control:focus,
+body.light-theme .form-select:focus {
+    background-color: #ffffff !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
+    color: var(--text-main) !important;
+}
+
+body.light-theme .form-control::placeholder {
+    color: var(--text-dim) !important;
+}
+
+body.light-theme .input-group-text {
+    background-color: #f8fafc !important;
+    border-color: var(--border-medium) !important;
+    color: var(--text-muted) !important;
+}
+
+body.light-theme .qty-stepper {
+    background: #ffffff;
+    border-color: var(--border-medium);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+body.light-theme .qty-stepper .btn-qty-step {
+    background: #f8fafc;
+    color: #475569;
+}
+
+body.light-theme .qty-stepper .btn-qty-step:hover:not(:disabled) {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+body.light-theme .qty-stepper .qty-stepper-input {
+    background: #ffffff;
+    color: #0f172a;
+}
+
+body.light-theme .qty-stepper .qty-stepper-input:focus {
+    background: #ffffff;
+}
+
+body.light-theme .search-results-panel {
+    background: #ffffff !important;
+    border-color: var(--border-medium) !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-theme .modal-content {
+    background-color: #ffffff !important;
+    border-color: var(--border-medium) !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12) !important;
+    color: var(--text-main) !important;
+}
+
+body.light-theme .modal-header {
+    background-color: #f8fafc !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    color: var(--text-main) !important;
+}
+
+body.light-theme .modal-footer {
+    background-color: #f8fafc !important;
+    border-top: 1px solid var(--border-subtle) !important;
+}
+
+body.light-theme .toast {
+    background-color: #ffffff !important;
+    border-color: var(--border-medium) !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08) !important;
+    color: var(--text-main) !important;
+}
+
+body.light-theme .btn-close {
+    filter: none !important;
+}
+
+body.light-theme .bg-success-subtle {
+    background-color: #ecfdf5 !important;
+    color: #047857 !important;
+}
+
+body.light-theme .bg-danger-subtle {
+    background-color: #fef2f2 !important;
+    color: #b91c1c !important;
+}
+
+body.light-theme .bg-warning-subtle {
+    background-color: #fffbeb !important;
+    color: #b45309 !important;
+}
+
+body.light-theme .bg-info-subtle {
+    background-color: #f0f9ff !important;
+    color: #0369a1 !important;
+}
+
+body.light-theme ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.16);
+}
+
+body.light-theme ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.28);
+}
+
+/* ==========================================================================
+   INTERACTIVE THEME SWITCHER COMPONENT (Sun / Moon Switcher)
+   ========================================================================== */
+.theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid var(--border-medium);
+    background-color: var(--surface-input);
+    color: var(--text-secondary);
+    user-select: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--surface-hover);
+    color: var(--text-main);
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle-btn i {
+    font-size: 0.95rem;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-toggle-btn:hover i {
+    transform: rotate(25deg) scale(1.15);
+}
+
+.theme-toggle-btn:active {
+    transform: scale(0.96);
 }
 
 /* Base Wrapper */

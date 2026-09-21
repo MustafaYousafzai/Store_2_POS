@@ -14,6 +14,13 @@ if (isLoggedIn()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function() {
+            var theme = localStorage.getItem('pos_theme') || 'dark';
+            document.documentElement.setAttribute('data-bs-theme', theme);
+            document.documentElement.classList.add(theme + '-theme');
+        })();
+    </script>
     <title><?= defined('STORE_NAME') ? STORE_NAME : 'One Dollar Shop' ?> - Login</title>
     <!-- Favicon (Browser Tab Icon) -->
     <link rel="icon" type="image/png" href="<?= logoUrl() ?>">
@@ -23,6 +30,8 @@ if (isLoggedIn()) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -35,6 +44,11 @@ if (isLoggedIn()) {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: #f8fafc;
             padding: 1.5rem;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        body.light-theme {
+            background: radial-gradient(ellipse at 50% 20%, #ffffff 0%, #e2e8f0 100%);
+            color: #0f172a;
         }
         .login-card {
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -90,6 +104,68 @@ if (isLoggedIn()) {
             color: #ffffff;
             box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
         }
+        body.light-theme .login-card {
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+            background-color: rgba(255, 255, 255, 0.96);
+        }
+        body.light-theme .login-header h3 {
+            color: #0f172a;
+        }
+        body.light-theme .login-header p {
+            color: #64748b;
+        }
+        body.light-theme .form-label {
+            color: #334155;
+        }
+        body.light-theme .form-control {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+        }
+        body.light-theme .form-control:focus {
+            background-color: #ffffff;
+            border-color: #ef4444;
+            color: #0f172a;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+        .theme-toggle-floating {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+        .theme-toggle-floating .theme-toggle-btn {
+            background: rgba(17, 24, 39, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            user-select: none;
+        }
+        body.light-theme .theme-toggle-floating .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        }
+        .theme-toggle-floating .theme-toggle-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        .theme-toggle-floating .theme-toggle-btn i {
+            font-size: 1rem;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .theme-toggle-floating .theme-toggle-btn:hover i {
+            transform: rotate(25deg) scale(1.15);
+        }
         .btn-primary {
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             border: none;
@@ -108,6 +184,22 @@ if (isLoggedIn()) {
     </style>
 </head>
 <body>
+<script>
+    (function() {
+        var theme = localStorage.getItem('pos_theme') || 'dark';
+        document.body.classList.remove('dark-theme', 'light-theme');
+        document.body.classList.add(theme + '-theme');
+    })();
+</script>
+
+<!-- Floating Theme Toggle Switcher -->
+<div class="theme-toggle-floating">
+    <button type="button" id="themeToggleBtn" class="theme-toggle-btn" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
+        <i class="fas fa-sun theme-icon-sun text-warning d-none"></i>
+        <i class="fas fa-moon theme-icon-moon text-info"></i>
+        <span class="theme-text fw-bold fs-7">Theme</span>
+    </button>
+</div>
 
 <div class="card login-card">
     <div class="login-header">
@@ -143,6 +235,45 @@ if (isLoggedIn()) {
 
 <script>
 $(document).ready(function() {
+    // Dual Theme Engine for Login
+    window.applyTheme = function(theme) {
+        if (!theme || (theme !== 'dark' && theme !== 'light')) {
+            theme = localStorage.getItem('pos_theme') || 'dark';
+        }
+        localStorage.setItem('pos_theme', theme);
+        document.documentElement.setAttribute('data-bs-theme', theme);
+        
+        if (theme === 'light') {
+            $('html, body').removeClass('dark-theme').addClass('light-theme');
+            $('.theme-icon-sun').addClass('d-none');
+            $('.theme-icon-moon').removeClass('d-none');
+            $('#themeToggleBtn').attr('title', 'Switch to Dark Mode');
+            $('.theme-text').text('Light');
+        } else {
+            $('html, body').removeClass('light-theme').addClass('dark-theme');
+            $('.theme-icon-moon').addClass('d-none');
+            $('.theme-icon-sun').removeClass('d-none');
+            $('#themeToggleBtn').attr('title', 'Switch to Light Mode');
+            $('.theme-text').text('Dark');
+        }
+    };
+
+    const savedTheme = localStorage.getItem('pos_theme') || 'dark';
+    window.applyTheme(savedTheme);
+
+    $(document).on('click', '#themeToggleBtn', function(e) {
+        e.preventDefault();
+        const current = localStorage.getItem('pos_theme') || 'dark';
+        const target = current === 'dark' ? 'light' : 'dark';
+        window.applyTheme(target);
+    });
+
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'pos_theme' && e.newValue) {
+            window.applyTheme(e.newValue);
+        }
+    });
+
     $('#loginForm').on('submit', function(e) {
         e.preventDefault();
         

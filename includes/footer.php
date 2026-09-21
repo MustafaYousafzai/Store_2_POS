@@ -169,6 +169,52 @@ $(document).ready(function() {
     $(document).on('wheel', 'input[type=number]', function(e) {
         $(this).blur();
     });
+
+    // ==========================================================================
+    // DUAL THEME ENGINE (Dark & Light) WITH MULTI-TAB SYNCHRONIZATION
+    // ==========================================================================
+    window.applyTheme = function(theme) {
+        if (!theme || (theme !== 'dark' && theme !== 'light')) {
+            theme = localStorage.getItem('pos_theme') || 'dark';
+        }
+        localStorage.setItem('pos_theme', theme);
+        document.documentElement.setAttribute('data-bs-theme', theme);
+        
+        if (theme === 'light') {
+            $('html, body').removeClass('dark-theme').addClass('light-theme');
+            $('.theme-icon-sun').addClass('d-none');
+            $('.theme-icon-moon').removeClass('d-none');
+            $('#themeToggleBtn, .theme-toggle-btn').attr('title', 'Switch to Dark Mode');
+            $('.theme-text').text('Light');
+        } else {
+            $('html, body').removeClass('light-theme').addClass('dark-theme');
+            $('.theme-icon-moon').addClass('d-none');
+            $('.theme-icon-sun').removeClass('d-none');
+            $('#themeToggleBtn, .theme-toggle-btn').attr('title', 'Switch to Light Mode');
+            $('.theme-text').text('Dark');
+        }
+        
+        window.dispatchEvent(new CustomEvent('posThemeChanged', { detail: { theme: theme } }));
+    };
+
+    // Initialize toggle button state on page ready
+    const savedTheme = localStorage.getItem('pos_theme') || 'dark';
+    window.applyTheme(savedTheme);
+
+    // Toggle click handler
+    $(document).on('click', '#themeToggleBtn, .theme-toggle-btn', function(e) {
+        e.preventDefault();
+        const currentTheme = localStorage.getItem('pos_theme') || 'dark';
+        const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        window.applyTheme(targetTheme);
+    });
+
+    // Cross-tab theme synchronization
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'pos_theme' && e.newValue) {
+            window.applyTheme(e.newValue);
+        }
+    });
 });
 </script>
 </body>
