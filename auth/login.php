@@ -36,9 +36,9 @@ if (isLoggedIn()) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: radial-gradient(circle at 15% 15%, #1e1b4b 0%, transparent 40%),
-                        radial-gradient(circle at 85% 85%, #311018 0%, transparent 40%),
-                        radial-gradient(ellipse at 50% 50%, #0f172a 0%, #06090f 100%);
+            background: radial-gradient(circle at 10% 15%, #1e1b4b 0%, transparent 45%),
+                        radial-gradient(circle at 90% 85%, #3f0d1a 0%, transparent 45%),
+                        radial-gradient(ellipse at 50% 50%, #0c1220 0%, #05080f 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -55,12 +55,12 @@ if (isLoggedIn()) {
             color: #0f172a;
         }
         .login-card {
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            background-color: rgba(17, 24, 39, 0.82);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            background-color: rgba(14, 20, 34, 0.82);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
             width: 100%;
             max-width: 430px;
             padding: 2.5rem 2.25rem;
@@ -96,8 +96,8 @@ if (isLoggedIn()) {
             margin-bottom: 0.4rem;
         }
         .form-control {
-            background-color: rgba(11, 17, 32, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.14);
+            background-color: rgba(9, 14, 26, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             color: #ffffff;
             border-radius: 10px;
             padding: 11px 16px;
@@ -105,10 +105,10 @@ if (isLoggedIn()) {
             transition: all 0.2s ease;
         }
         .form-control:focus {
-            background-color: rgba(13, 21, 39, 0.95);
+            background-color: rgba(13, 21, 38, 0.95);
             border-color: #ef4444;
             color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3), inset 0 1px 2px rgba(0, 0, 0, 0.5);
         }
         body.light-theme .login-card {
             border: 1px solid rgba(226, 232, 240, 0.9);
@@ -144,12 +144,12 @@ if (isLoggedIn()) {
             z-index: 1050;
         }
         .theme-toggle-floating .theme-toggle-btn {
-            background: rgba(17, 24, 39, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(14, 20, 34, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.14);
             color: #f8fafc;
             padding: 8px 16px;
             border-radius: 9999px;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -177,17 +177,17 @@ if (isLoggedIn()) {
         .btn-primary {
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 700;
             font-size: 0.95rem;
-            padding: 11px;
-            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+            padding: 12px;
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.2);
             transition: all 0.2s ease;
         }
         .btn-primary:hover, .btn-primary:focus {
             background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
             transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.45);
+            box-shadow: 0 6px 22px rgba(239, 68, 68, 0.48);
         }
     </style>
 </head>
