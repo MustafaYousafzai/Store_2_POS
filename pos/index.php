@@ -18,12 +18,13 @@ requirePermission('CREATE_SALE');
             <div class="card d-flex flex-column pos-catalog-card" style="height: calc(100vh - 110px); min-height: 400px; overflow: hidden; border-radius: 8px; border: 1px solid var(--card-border);">
                 <div class="card-header py-2 px-2 px-md-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
                     <div class="d-flex align-items-center gap-2 flex-grow-1 flex-wrap">
-                        <h5 class="mb-0 font-weight-bold text-light fs-6"><i class="fas fa-boxes me-1 text-danger"></i>Catalog</h5>
-                        <!-- Global Scanner Input (focused by default) with Autocomplete -->
-                        <div class="position-relative flex-grow-1" style="max-width: 260px; min-width: 170px;">
+                        <h5 class="mb-0 fw-bold fs-6"><i class="fas fa-boxes me-1 text-danger"></i>Catalog</h5>
+                        <!-- Spotlight Barcode Scanner Input with Autocomplete -->
+                        <div class="spotlight-search-group position-relative flex-grow-1" style="max-width: 320px; min-width: 190px;">
                             <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-light text-secondary"><i class="fas fa-barcode"></i></span>
-                                <input type="text" class="form-control" id="posSearchInput" placeholder="Scan Barcode here..." autofocus autocomplete="off">
+                                <span class="input-group-text bg-transparent border-end-0 text-danger ps-2 pe-1"><i class="fas fa-barcode"></i></span>
+                                <input type="text" class="form-control spotlight-input border-start-0 ps-1" id="posSearchInput" placeholder="Scan Barcode / Search..." autofocus autocomplete="off">
+                                <span class="input-group-text bg-transparent border-start-0 pe-2"><kbd class="spotlight-kbd">F2</kbd></span>
                             </div>
                             <div id="mainSearchResultsPanel" class="search-results-panel w-100 mt-1 p-0 d-none">
                                 <div class="list-group list-group-flush" id="mainSearchResultsList">
@@ -35,19 +36,19 @@ requirePermission('CREATE_SALE');
                     
                     <div class="d-flex align-items-center gap-1 gap-md-2 flex-wrap">
                         <!-- Filter Search Input -->
-                        <div class="input-group input-group-sm" style="max-width: 240px; min-width: 150px;">
-                            <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
-                            <input type="text" class="form-control" id="catalogSearchInput" placeholder="Search catalog...">
+                        <div class="input-group input-group-sm" style="max-width: 220px; min-width: 140px;">
+                            <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fas fa-search"></i></span>
+                            <input type="text" class="form-control border-start-0 ps-1" id="catalogSearchInput" placeholder="Filter table...">
                         </div>
                         
                         <!-- Quick Expense Shortcut for Cashier -->
-                        <button type="button" class="btn btn-outline-danger btn-sm font-weight-bold px-2 py-1 shadow-sm" id="btnPosQuickExpense" title="Record Petty Cash / Khana / Chai">
+                        <button type="button" class="btn btn-outline-danger btn-sm fw-bold px-2.5 py-1 rounded-pill shadow-sm" id="btnPosQuickExpense" title="Record Petty Cash / Khana / Chai">
                             <i class="fas fa-wallet me-1"></i> Expense
                         </button>
 
-                        <!-- Floating View Cart Button -->
-                        <button type="button" class="btn btn-danger btn-sm font-weight-bold px-2.5 py-1" id="btnOpenCartModal" data-bs-toggle="modal" data-bs-target="#posCartModal">
-                            <i class="fas fa-shopping-cart me-1"></i> Cart (<span id="globalCartCount">0</span>) - <span id="globalCartTotal">Rs. 0.00</span>
+                        <!-- Floating View Cart Button with Counter -->
+                        <button type="button" class="btn btn-danger btn-sm fw-bold px-3 py-1 rounded-pill shadow-sm" id="btnOpenCartModal" data-bs-toggle="modal" data-bs-target="#posCartModal">
+                            <i class="fas fa-cart-shopping me-1"></i> Cart (<span id="globalCartCount">0</span>) • <span id="globalCartTotal">Rs. 0.00</span>
                         </button>
                     </div>
                 </div>

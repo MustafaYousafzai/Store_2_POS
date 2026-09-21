@@ -539,6 +539,207 @@ body.light-theme ::-webkit-scrollbar-thumb:hover {
     transform: scale(0.96);
 }
 
+/* ==========================================================================
+   10X DESIGN SYSTEM: FROSTED GLASS, LIVE BEACON, SPOTLIGHT & HAPTICS
+   ========================================================================== */
+/* 1. Frosted Glass Top Navbar */
+.navbar-glass {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    transition: all 0.25s ease;
+}
+body.dark-theme .navbar-glass {
+    background-color: rgba(15, 23, 42, 0.9) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+body.light-theme .navbar-glass {
+    background-color: rgba(255, 255, 255, 0.92) !important;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.9) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* 2. Live POS Status Beacon */
+.status-beacon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+}
+.status-beacon-dot {
+    position: relative;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #10b981;
+    box-shadow: 0 0 6px #10b981;
+}
+.status-beacon-pulse {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: rgba(16, 185, 129, 0.35);
+    animation: beaconPulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+@keyframes beaconPulse {
+    0% { transform: scale(0.6); opacity: 0.9; }
+    70% { transform: scale(1.6); opacity: 0; }
+    100% { transform: scale(1.8); opacity: 0; }
+}
+
+/* 3. Executive User Profile Chip */
+.user-profile-chip {
+    background: transparent;
+    border-radius: 9999px;
+    padding: 3px 10px 3px 4px !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    text-decoration: none !important;
+}
+body.dark-theme .user-profile-chip {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #f8fafc;
+}
+body.dark-theme .user-profile-chip:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+body.light-theme .user-profile-chip {
+    background: #ffffff;
+    border: 1px solid #e2e8f0 !important;
+    color: #0f172a;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+body.light-theme .user-profile-chip:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1 !important;
+}
+.user-avatar-bubble {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #ffffff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.35);
+}
+.user-role-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 1px 6px;
+    border-radius: 4px;
+    display: inline-block;
+}
+.role-admin {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+.role-cashier {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+/* 4. Spotlight Command-K Style Barcode Search */
+.spotlight-search-group .input-group {
+    background: var(--surface-input);
+    border: 1px solid var(--border-medium);
+    border-radius: 10px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+}
+.spotlight-search-group .input-group:focus-within {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
+    background: var(--surface-card);
+}
+.spotlight-input {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-size: 0.88rem !important;
+    font-weight: 500;
+    padding: 7px 10px !important;
+}
+.spotlight-kbd {
+    background: var(--surface-header);
+    color: var(--text-muted);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    font-family: inherit;
+}
+
+/* 5. Tactile Press Physics & Dynamic Feedback */
+.btn:active,
+.theme-toggle-btn:active,
+.nav-horizontal-quick .nav-link:active,
+.app-tile-btn:active {
+    transform: scale(0.97) !important;
+}
+
+/* Cart Bounce Keyframe on item addition */
+@keyframes cartBounce {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.15) rotate(-3deg); }
+    60% { transform: scale(0.95) rotate(2deg); }
+    100% { transform: scale(1); }
+}
+.cart-bounce-pulse {
+    animation: cartBounce 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Modal Scale-Pop Entrance */
+.modal.fade .modal-dialog {
+    transform: scale(0.95) translateY(-8px);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+.modal.show .modal-dialog {
+    transform: scale(1) translateY(0);
+}
+
+/* 6. Stock Status Badges */
+.badge-stock {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.badge-stock-in {
+    background-color: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+.badge-stock-low {
+    background-color: rgba(245, 158, 11, 0.12);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.25);
+}
+.badge-stock-out {
+    background-color: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
 /* Base Wrapper */
 .wrapper {
     display: flex;
@@ -693,30 +894,33 @@ body.light-theme ::-webkit-scrollbar-thumb:hover {
 .nav-horizontal-quick .nav-link {
     white-space: nowrap !important;
     font-size: 0.82rem !important;
-    font-weight: 500 !important;
-    padding: 6px 14px !important;
-    border-radius: 8px !important;
+    font-weight: 600 !important;
+    padding: 6px 15px !important;
+    border-radius: 9999px !important;
     color: var(--text-secondary) !important;
     background-color: var(--surface-input) !important;
     border: 1px solid var(--border-subtle) !important;
-    transition: all 0.15s ease-in-out;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     display: inline-flex !important;
     align-items: center;
+    gap: 6px;
     text-decoration: none !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .nav-horizontal-quick .nav-link:hover {
     background-color: var(--surface-hover) !important;
     color: #ffffff !important;
     border-color: var(--border-medium) !important;
-    transform: translateY(-1px);
+    transform: translateY(-1.5px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
 }
 
 .nav-horizontal-quick .nav-link.active {
-    background-color: var(--accent) !important;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
     color: #ffffff !important;
-    font-weight: 600 !important;
-    border-color: var(--accent) !important;
+    font-weight: 700 !important;
+    border-color: #ef4444 !important;
     box-shadow: 0 3px 12px var(--accent-glow) !important;
 }
 

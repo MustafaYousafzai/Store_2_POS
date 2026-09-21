@@ -303,6 +303,12 @@ $(document).ready(function() {
         
         $('#globalCartCount').text(totalQty);
         $('#globalCartTotal').text(`Rs. ${grandTotal.toFixed(2)}`);
+        if (highlightProductId) {
+            const $cartBtn = $('#btnOpenCartModal');
+            $cartBtn.removeClass('cart-bounce-pulse');
+            if ($cartBtn[0]) void $cartBtn[0].offsetWidth;
+            $cartBtn.addClass('cart-bounce-pulse');
+        }
 
         if (cart.length === 0) {
             $('#cartTableBody').html(`

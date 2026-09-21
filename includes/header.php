@@ -258,13 +258,19 @@ window.printThermalReceipt = function(htmlContent) {
     <!-- Main Content Container -->
     <div id="content" class="w-100">
         <!-- Top Navbar -->
-        <nav class="navbar navbar-dark bg-dark-header border-bottom px-2 px-md-3 py-1 py-md-2 d-print-none">
+        <nav class="navbar navbar-glass border-bottom px-2 px-md-3 py-1 py-md-2 d-print-none">
             <div class="container-fluid px-0 d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div class="d-flex align-items-center flex-wrap gap-2 me-auto">
-                    <button type="button" id="sidebarCollapse" class="btn btn-outline-secondary px-2 py-1" title="Toggle Navigation Sidebar">
-                        <i class="fas fa-align-left"></i>
+                    <button type="button" id="sidebarCollapse" class="btn btn-outline-secondary px-2 py-1 rounded-pill" title="Toggle Navigation Sidebar">
+                        <i class="fas fa-bars"></i>
                     </button>
-                    <h4 class="mb-0 text-light font-weight-bold fs-6 fs-md-5 text-truncate" style="max-width: 280px;"><?= defined('STORE_NAME') ? STORE_NAME : 'One Dollar Shop' ?></h4>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="status-beacon" title="Terminal Live & Connected">
+                            <span class="status-beacon-pulse"></span>
+                            <span class="status-beacon-dot"></span>
+                        </span>
+                        <h4 class="mb-0 fw-bold fs-6 fs-md-5 text-truncate" style="max-width: 280px; letter-spacing: -0.3px;"><?= defined('STORE_NAME') ? STORE_NAME : 'One Dollar Shop' ?></h4>
+                    </div>
                 </div>
                 <div class="d-flex align-items-center gap-1 gap-md-2 flex-wrap ms-auto">
                     <?php if (hasPermission('MANAGE_KHATA') || hasPermission('CREATE_SALE') || isAdmin()): ?>
@@ -285,17 +291,28 @@ window.printThermalReceipt = function(htmlContent) {
                         <span class="theme-text d-none d-lg-inline fs-7">Theme</span>
                     </button>
 
+                    <!-- Executive User Profile Chip -->
                     <div class="dropdown ms-1">
-                        <a class="nav-link dropdown-toggle text-light font-weight-bold py-1 px-1 px-md-2 text-nowrap" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle me-1 text-secondary"></i> <span class="d-none d-md-inline"><?php echo htmlspecialchars($_SESSION['username']); ?> (<?php echo ($_SESSION['role'] === 'admin') ? 'Admin' : 'Cashier'; ?>)</span><span class="d-inline d-md-none"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userDropdown" style="z-index: 1070;">
+                        <button class="user-profile-chip dropdown-toggle d-flex align-items-center gap-2 py-1 px-2 border-0" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="user-avatar-bubble"><?= strtoupper(substr($_SESSION['username'] ?? 'U', 0, 1)) ?></span>
+                            <div class="d-none d-md-flex flex-column text-start" style="line-height: 1.15;">
+                                <span class="fw-bold fs-7 user-name-text"><?= htmlspecialchars($_SESSION['username']) ?></span>
+                                <span class="user-role-badge <?= ($_SESSION['role'] === 'admin') ? 'role-admin' : 'role-cashier' ?>">
+                                    <?= ($_SESSION['role'] === 'admin') ? 'Admin' : 'Cashier' ?>
+                                </span>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" aria-labelledby="userDropdown" style="z-index: 1070; min-width: 210px;">
+                            <li class="px-3 py-2 border-bottom">
+                                <small class="text-muted d-block">Signed in as</small>
+                                <strong class="text-truncate d-block"><?= htmlspecialchars($_SESSION['username']) ?></strong>
+                            </li>
                             <?php if (isAdmin()): ?>
-                            <li><a class="dropdown-item" href="<?= url('/users/index.php') ?>"><i class="fas fa-users-gear me-2 text-info"></i>Manage Users</a></li>
+                            <li><a class="dropdown-item py-2" href="<?= url('/users/index.php') ?>"><i class="fas fa-users-gear me-2 text-info"></i>Manage Users</a></li>
                             <?php endif; ?>
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal"><i class="fas fa-key me-2 text-muted"></i>Change Password</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="<?= url('/logout.php') ?>"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            <li><a class="dropdown-item py-2" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal"><i class="fas fa-key me-2 text-muted"></i>Change Password</a></li>
+                            <li><hr class="dropdown-divider my-1"></li>
+                            <li><a class="dropdown-item py-2 text-danger" href="<?= url('/logout.php') ?>"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                         </ul>
                     </div>
                 </div>

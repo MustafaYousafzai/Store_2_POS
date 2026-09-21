@@ -36,7 +36,9 @@ if (isLoggedIn()) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: radial-gradient(ellipse at 50% 20%, #1e293b 0%, #090d16 100%);
+            background: radial-gradient(circle at 15% 15%, #1e1b4b 0%, transparent 40%),
+                        radial-gradient(circle at 85% 85%, #311018 0%, transparent 40%),
+                        radial-gradient(ellipse at 50% 50%, #0f172a 0%, #06090f 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -44,21 +46,25 @@ if (isLoggedIn()) {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: #f8fafc;
             padding: 1.5rem;
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: background 0.4s ease, color 0.4s ease;
         }
         body.light-theme {
-            background: radial-gradient(ellipse at 50% 20%, #ffffff 0%, #e2e8f0 100%);
+            background: radial-gradient(circle at 15% 15%, #e0e7ff 0%, transparent 40%),
+                        radial-gradient(circle at 85% 85%, #fee2e2 0%, transparent 40%),
+                        radial-gradient(ellipse at 50% 50%, #f8fafc 0%, #e2e8f0 100%);
             color: #0f172a;
         }
         .login-card {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
-            background-color: rgba(17, 24, 39, 0.92);
-            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            background-color: rgba(17, 24, 39, 0.82);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             width: 100%;
-            max-width: 420px;
-            padding: 2.25rem 2rem;
+            max-width: 430px;
+            padding: 2.5rem 2.25rem;
+            position: relative;
         }
         .login-logo {
             max-width: 80px;
@@ -90,24 +96,26 @@ if (isLoggedIn()) {
             margin-bottom: 0.4rem;
         }
         .form-control {
-            background-color: #0b1120;
+            background-color: rgba(11, 17, 32, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.14);
             color: #ffffff;
-            border-radius: 8px;
-            padding: 10px 14px;
+            border-radius: 10px;
+            padding: 11px 16px;
             font-size: 0.95rem;
             transition: all 0.2s ease;
         }
         .form-control:focus {
-            background-color: #0d1527;
+            background-color: rgba(13, 21, 39, 0.95);
             border-color: #ef4444;
             color: #ffffff;
             box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
         }
         body.light-theme .login-card {
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
-            background-color: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
         }
         body.light-theme .login-header h3 {
             color: #0f172a;
