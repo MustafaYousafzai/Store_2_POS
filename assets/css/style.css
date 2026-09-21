@@ -1148,6 +1148,128 @@ body.dark-theme .btn-danger:hover {
     transform: translateY(-1px);
 }
 
+/* Dark theme button text protection: inside buttons, text-dark must never turn black */
+body.dark-theme .btn.text-dark,
+body.dark-theme .btn .text-dark {
+    color: inherit !important;
+}
+
+/* Warning & Pay Pause Buttons */
+body.dark-theme .btn-warning,
+body.dark-theme .btn-warning.text-dark,
+body.dark-theme .btn-warning .text-dark,
+body.dark-theme #btnHeaderPausePay,
+body.dark-theme .btn-tab-pause-pay {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    border-color: #f59e0b !important;
+    color: #0f172a !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35) !important;
+}
+
+body.dark-theme .btn-warning:hover,
+body.dark-theme .btn-warning.text-dark:hover,
+body.dark-theme .btn-warning:hover .text-dark,
+body.dark-theme #btnHeaderPausePay:hover,
+body.dark-theme .btn-tab-pause-pay:hover {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+    border-color: #fbbf24 !important;
+    color: #0f172a !important;
+    box-shadow: 0 6px 18px rgba(245, 158, 11, 0.45) !important;
+}
+
+body.dark-theme .btn-warning i,
+body.dark-theme .btn-warning:hover i {
+    color: #0f172a !important;
+}
+
+body.dark-theme .btn-outline-warning,
+body.dark-theme .btn-outline-warning.text-dark,
+body.dark-theme .btn-outline-warning .text-dark,
+body.dark-theme .btn-card-pause {
+    color: #fbbf24 !important;
+    border-color: rgba(245, 158, 11, 0.5) !important;
+    background-color: rgba(245, 158, 11, 0.08) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .btn-outline-warning:hover,
+body.dark-theme .btn-outline-warning.text-dark:hover,
+body.dark-theme .btn-outline-warning:hover .text-dark,
+body.dark-theme .btn-card-pause:hover {
+    color: #0f172a !important;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+    border-color: #fbbf24 !important;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4) !important;
+}
+
+body.dark-theme .btn-outline-warning i,
+body.dark-theme .btn-card-pause i {
+    color: inherit !important;
+}
+
+body.light-theme .btn-outline-warning,
+body.light-theme .btn-outline-warning.text-dark,
+body.light-theme .btn-card-pause {
+    color: #b45309 !important;
+    border-color: #f59e0b !important;
+    background-color: #fffbeb !important;
+}
+
+body.light-theme .btn-outline-warning:hover,
+body.light-theme .btn-outline-warning.text-dark:hover,
+body.light-theme .btn-card-pause:hover {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    border-color: #f59e0b !important;
+    box-shadow: 0 3px 10px rgba(245, 158, 11, 0.3) !important;
+}
+
+body.dark-theme .btn-outline-primary,
+body.dark-theme .btn-card-edit {
+    color: #38bdf8 !important;
+    border-color: rgba(56, 189, 248, 0.45) !important;
+    background-color: rgba(56, 189, 248, 0.08) !important;
+}
+
+body.dark-theme .btn-outline-primary:hover,
+body.dark-theme .btn-card-edit:hover {
+    color: #ffffff !important;
+    background-color: #0284c7 !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4) !important;
+}
+
+body.dark-theme .btn-outline-success,
+body.dark-theme .btn-card-resume {
+    color: #34d399 !important;
+    border-color: rgba(16, 185, 129, 0.45) !important;
+    background-color: rgba(16, 185, 129, 0.08) !important;
+}
+
+body.dark-theme .btn-outline-success:hover,
+body.dark-theme .btn-card-resume:hover {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    border-color: #10b981 !important;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4) !important;
+}
+
+body.dark-theme .btn-outline-danger,
+body.dark-theme .btn-card-kharcha {
+    color: #f87171 !important;
+    border-color: rgba(239, 68, 68, 0.45) !important;
+    background-color: rgba(239, 68, 68, 0.08) !important;
+}
+
+body.dark-theme .btn-outline-danger:hover,
+body.dark-theme .btn-card-kharcha:hover {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    border-color: #ef4444 !important;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4) !important;
+}
+
 body.dark-theme .btn-outline-secondary {
     border-color: rgba(255, 255, 255, 0.14) !important;
     color: #cbd5e1 !important;
@@ -1158,18 +1280,6 @@ body.dark-theme .btn-outline-secondary:hover {
     background-color: rgba(255, 255, 255, 0.1) !important;
     color: #ffffff !important;
     border-color: rgba(255, 255, 255, 0.25) !important;
-}
-
-body.dark-theme .btn-outline-danger {
-    border-color: rgba(239, 68, 68, 0.4) !important;
-    color: #f87171 !important;
-    background: transparent !important;
-}
-
-body.dark-theme .btn-outline-danger:hover {
-    background-color: var(--accent) !important;
-    color: #ffffff !important;
-    border-color: var(--accent) !important;
 }
 
 body.dark-theme .btn-secondary {
@@ -1184,16 +1294,150 @@ body.dark-theme .btn-secondary:hover {
     border-color: rgba(255, 255, 255, 0.22) !important;
 }
 
-body.dark-theme .btn-outline-dark {
-    border-color: rgba(255, 255, 255, 0.15) !important;
-    color: #cbd5e1 !important;
-    background: transparent !important;
+body.dark-theme .btn-outline-dark,
+body.dark-theme .btn-detail-edit {
+    border-color: rgba(255, 255, 255, 0.18) !important;
+    color: #f8fafc !important;
+    background: rgba(255, 255, 255, 0.04) !important;
 }
 
-body.dark-theme .btn-outline-dark:hover {
+body.dark-theme .btn-outline-dark:hover,
+body.dark-theme .btn-detail-edit:hover {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+body.dark-theme .btn-dark,
+body.dark-theme .btn-card-hissaab,
+body.dark-theme .btn-card-detail {
+    background-color: #162238 !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    color: #f8fafc !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-theme .btn-dark:hover,
+body.dark-theme .btn-card-hissaab:hover,
+body.dark-theme .btn-card-detail:hover {
+    background-color: #1e2e4a !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-theme .btn-light {
+    background-color: #121a2c !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-theme .btn-light:hover {
     background-color: rgba(255, 255, 255, 0.08) !important;
     color: #ffffff !important;
-    border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Staff & Payroll Components in Dark Theme */
+body.dark-theme .staff-card-simple {
+    background: #0e1422 !important;
+    border-color: rgba(255, 255, 255, 0.07) !important;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+body.dark-theme .staff-card-simple:hover {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.7) !important;
+}
+
+body.dark-theme .filter-pill {
+    background: #090e1a !important;
+    color: #cbd5e1 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+body.dark-theme .filter-pill:hover {
+    background: rgba(255, 255, 255, 0.07) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+body.dark-theme .filter-pill.active {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: #ffffff !important;
+    border-color: #ef4444 !important;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.38) !important;
+}
+
+body.dark-theme .view-btn {
+    background: #090e1a !important;
+    color: #cbd5e1 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-theme .view-btn:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+}
+
+body.dark-theme .view-btn.active {
+    background: #1e293b !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+body.dark-theme .quick-chip {
+    background: #090e1a !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-theme .quick-chip:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Sub-tabs / Pills across the entire app */
+body.dark-theme .nav-pills .nav-link {
+    color: #94a3b8 !important;
+    background: transparent !important;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+body.dark-theme .nav-pills .nav-link:hover {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+}
+
+body.dark-theme .nav-pills .nav-link.active {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.38) !important;
+}
+
+body.light-theme .nav-pills .nav-link {
+    color: #475569 !important;
+    background: transparent !important;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+body.light-theme .nav-pills .nav-link:hover {
+    color: #0f172a !important;
+    background: #f1f5f9 !important;
+}
+
+body.light-theme .nav-pills .nav-link.active {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.28) !important;
+}
+
+body.dark-theme #salarySheetBox {
+    background-color: #090e1a !important;
+    border-color: rgba(255, 255, 255, 0.07) !important;
 }
 
 body.dark-theme .qty-stepper {

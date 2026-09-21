@@ -16,28 +16,28 @@ $initialTab = isset($_GET['tab']) ? sanitize($_GET['tab']) : '';
    ========================================================================== */
 .staff-card-simple {
     border-radius: 16px;
-    border: 1px solid #e2e8f0;
-    background: #ffffff;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-card);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
     overflow: hidden;
 }
 .staff-card-simple:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(0,0,0,0.08);
-    border-color: #cbd5e1;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+    border-color: var(--border-medium);
 }
 .staff-avatar-circle {
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: #0f172a;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
     color: #ffffff;
     font-weight: 800;
     font-size: 1.25rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
     flex-shrink: 0;
 }
 
@@ -139,14 +139,15 @@ $initialTab = isset($_GET['tab']) ? sanitize($_GET['tab']) : '';
     font-weight: 700;
     border-radius: 20px;
     padding: 4px 10px;
-    background: #f1f5f9;
-    border: 1px solid #cbd5e1;
-    color: #334155;
+    background: var(--surface-input);
+    border: 1px solid var(--border-medium);
+    color: var(--text-secondary);
     transition: all 0.15s ease;
 }
 .quick-chip:hover {
-    background: #e2e8f0;
-    border-color: #94a3b8;
+    background: var(--surface-hover);
+    color: var(--text-main);
+    border-color: var(--border-strong);
     transform: translateY(-1px);
 }
 
@@ -157,30 +158,41 @@ $initialTab = isset($_GET['tab']) ? sanitize($_GET['tab']) : '';
     padding: 6px 14px;
     font-weight: 600;
     font-size: 0.85rem;
-    border: 1px solid #e2e8f0;
-    background: #ffffff;
-    color: #64748b;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-input);
+    color: var(--text-secondary);
     transition: all 0.15s ease;
 }
+.filter-pill:hover {
+    background: var(--surface-hover);
+    color: var(--text-main);
+    border-color: var(--border-medium);
+}
 .filter-pill.active {
-    background: #0f172a;
-    color: #ffffff;
-    border-color: #0f172a;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: #ffffff !important;
+    border-color: #ef4444 !important;
+    box-shadow: 0 4px 14px var(--accent-glow) !important;
 }
 
 /* View Switcher */
 .view-btn {
-    border: 1px solid #cbd5e1;
-    background: #ffffff;
-    color: #64748b;
+    border: 1px solid var(--border-medium);
+    background: var(--surface-input);
+    color: var(--text-secondary);
     padding: 6px 12px;
     font-size: 0.85rem;
     font-weight: 600;
+    transition: all 0.15s ease;
+}
+.view-btn:hover {
+    background: var(--surface-hover);
+    color: var(--text-main);
 }
 .view-btn.active {
-    background: #0f172a;
+    background: #1e293b;
     color: #ffffff;
-    border-color: #0f172a;
+    border-color: #334155;
 }
 </style>
 
@@ -390,7 +402,7 @@ $initialTab = isset($_GET['tab']) ? sanitize($_GET['tab']) : '';
                 <button type="button" class="btn btn-sm btn-outline-dark fw-bold rounded-pill px-3 shadow-sm btn-detail-edit" id="btnEditSelectedEmp" title="Edit Profile">
                     <i class="fas fa-pen text-primary me-1"></i> Edit Profile
                 </button>
-                <button type="button" class="btn btn-sm btn-warning text-dark fw-bold rounded-pill px-3 shadow-sm" id="btnHeaderPausePay" title="Pause Salary Accrual">
+                <button type="button" class="btn btn-sm btn-warning fw-bold rounded-pill px-3 shadow-sm" id="btnHeaderPausePay" title="Pause Salary Accrual">
                     <i class="fas fa-pause me-1"></i> Pause Pay
                 </button>
                 <button type="button" class="btn btn-sm btn-success text-white fw-bold rounded-pill px-3 shadow-sm d-none" id="btnHeaderResumePay" title="Resume Salary Accrual">
@@ -601,7 +613,7 @@ $initialTab = isset($_GET['tab']) ? sanitize($_GET['tab']) : '';
                                 <button type="button" class="btn btn-xs btn-danger fw-bold rounded-pill px-2 py-1 btn-quick-cash" data-id="<?php echo $selectedEmpId; ?>" style="font-size:0.78rem;">
                                     <i class="fas fa-hand-holding-dollar me-1"></i> + Give Advance
                                 </button>
-                                <button type="button" class="btn btn-xs btn-warning text-dark fw-bold rounded-pill px-2 py-1 btn-quick-daily" data-id="<?php echo $selectedEmpId; ?>" style="font-size:0.78rem;">
+                                <button type="button" class="btn btn-xs btn-warning fw-bold rounded-pill px-2 py-1 btn-quick-daily" data-id="<?php echo $selectedEmpId; ?>" style="font-size:0.78rem;">
                                     <i class="fas fa-money-bill me-1"></i> + Daily Cash
                                 </button>
                                 <button type="button" class="btn btn-xs btn-outline-danger fw-bold rounded-pill px-2 py-1 btn-quick-deduct" data-id="<?php echo $selectedEmpId; ?>" style="font-size:0.78rem;">
@@ -1006,7 +1018,7 @@ $initialTab = isset($_GET['tab']) ? sanitize($_GET['tab']) : '';
                             <small class="text-muted">Salary accrual freeze intervals (Staff leave / put on hold)</small>
                         </div>
                         <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-warning text-dark btn-sm fw-bold rounded-pill px-3 shadow-sm btn-tab-pause-pay">
+                            <button type="button" class="btn btn-warning btn-sm fw-bold rounded-pill px-3 shadow-sm btn-tab-pause-pay">
                                 <i class="fas fa-pause me-1"></i> Pause Pay Now
                             </button>
                             <button type="button" class="btn btn-success btn-sm fw-bold rounded-pill px-3 shadow-sm btn-tab-resume-pay">
@@ -1218,7 +1230,7 @@ $initialTab = isset($_GET['tab']) ? sanitize($_GET['tab']) : '';
                 </div>
                 <div class="modal-footer bg-light py-3 px-4">
                     <button type="button" class="btn btn-secondary btn-lg px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-warning text-dark btn-lg fw-bold px-5" id="btnConfirmPausePay">Confirm Pause Pay</button>
+                    <button type="submit" class="btn btn-warning btn-lg fw-bold px-5" id="btnConfirmPausePay">Confirm Pause Pay</button>
                 </div>
             </form>
         </div>
@@ -1457,7 +1469,7 @@ $initialTab = isset($_GET['tab']) ? sanitize($_GET['tab']) : '';
                 </div>
                 <div class="modal-footer bg-light py-3 px-4">
                     <button type="button" class="btn btn-secondary btn-lg px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-warning btn-lg fw-bold px-5 text-dark" id="btnSaveQuickDeduct">Save Deduction</button>
+                    <button type="submit" class="btn btn-warning btn-lg fw-bold px-5" id="btnSaveQuickDeduct">Save Deduction</button>
                 </div>
             </form>
         </div>
@@ -2191,7 +2203,7 @@ $(document).ready(function() {
                                     <i class="fas fa-play me-1"></i> Resume
                                 </button>
                             ` : `
-                                <button type="button" class="btn btn-outline-warning text-dark btn-sm fw-bold flex-fill rounded-3 py-1 btn-card-pause" onclick="openPausePayModal(${emp.id}); event.stopPropagation();" title="Pause Pay">
+                                <button type="button" class="btn btn-outline-warning btn-sm fw-bold flex-fill rounded-3 py-1 btn-card-pause" onclick="openPausePayModal(${emp.id}); event.stopPropagation();" title="Pause Pay">
                                     <i class="fas fa-pause me-1"></i> Pause
                                 </button>
                             `}
@@ -2235,7 +2247,7 @@ $(document).ready(function() {
                             ${isPaused ? `
                                 <button type="button" class="btn btn-outline-success" onclick="openResumePayModal(${emp.id}); event.stopPropagation();" title="Resume Pay"><i class="fas fa-play"></i></button>
                             ` : `
-                                <button type="button" class="btn btn-outline-warning text-dark" onclick="openPausePayModal(${emp.id}); event.stopPropagation();" title="Pause Pay"><i class="fas fa-pause"></i></button>
+                                <button type="button" class="btn btn-outline-warning btn-card-pause" onclick="openPausePayModal(${emp.id}); event.stopPropagation();" title="Pause Pay"><i class="fas fa-pause"></i></button>
                             `}
                             <button type="button" class="btn btn-outline-danger btn-card-kharcha" data-id="${emp.id}" onclick="openQuickCashModal(${emp.id}, 'advance'); event.stopPropagation();" title="Kharcha"><i class="fas fa-hand-holding-dollar"></i></button>
                             <button type="button" class="btn btn-dark btn-card-hissaab" data-id="${emp.id}" onclick="openEmployeeDetail(${emp.id}, 'settlement'); event.stopPropagation();" title="Hissaab"><i class="fas fa-file-invoice-dollar text-warning"></i></button>
@@ -2703,11 +2715,11 @@ $(document).ready(function() {
 
             if (txType === 'daily_payment') {
                 $('#quickCashModal .modal-title').html('<i class="fas fa-money-bill me-2 text-warning"></i>Give Daily Cash (Rozana Kharcha)');
-                $('#btnSaveQuickCash').text('Save Daily Payment').removeClass('btn-danger').addClass('btn-warning text-dark');
+                $('#btnSaveQuickCash').text('Save Daily Payment').removeClass('btn-danger').addClass('btn-warning');
                 $('#qc_desc').attr('placeholder', 'e.g. Daily cash, kharcha, lunch...');
             } else {
                 $('#quickCashModal .modal-title').html('<i class="fas fa-hand-holding-dollar me-2 text-danger"></i>Give Cash Advance (Naqad Peshi)');
-                $('#btnSaveQuickCash').text('Save Advance Payment').removeClass('btn-warning text-dark').addClass('btn-danger');
+                $('#btnSaveQuickCash').text('Save Advance Payment').removeClass('btn-warning').addClass('btn-danger');
                 $('#qc_desc').attr('placeholder', 'e.g. Personal kharcha, emergency, advance...');
             }
 
