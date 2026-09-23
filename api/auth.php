@@ -10,8 +10,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = isset($_POST['username']) ? sanitize($_POST['username']) : '';
         $password = isset($_POST['password']) ? $_POST['password'] : ''; // Keep password un-sanitized to avoid escaping characters
         
+        $isAjax = (
+            (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') ||
+            (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false) ||
+            isset($_GET['ajax']) ||
+            isset($_POST['ajax'])
+        );
+        $wantsRedirect = isset($_GET['redirect']) || isset($_POST['redirect']) || (
+            !$isAjax && isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === 0
+        );
+
         if (empty($username) || empty($password)) {
-            sendJSON(['success' => false, 'message' => 'Username and password are required.'], 400);
+            $errorMsg = 'Username and password are required.';
+            if ($wantsRedirect) {
+                redirect('/auth/login.php?error=' . urlencode($errorMsg));
+            } else {
+                sendJSON(['success' => false, 'message' => $errorMsg], 400);
+            }
         }
         
         $db = getDBConnection();
@@ -21,7 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($user && password_verify($password, $user['password_hash'])) {
             if ($user['status'] !== 'active') {
-                sendJSON(['success' => false, 'message' => 'Account is inactive. Please contact Administrator.'], 403);
+                $errorMsg = 'Account is inactive. Please contact Administrator.';
+                if ($wantsRedirect) {
+                    redirect('/auth/login.php?error=' . urlencode($errorMsg));
+                } else {
+                    sendJSON(['success' => false, 'message' => $errorMsg], 403);
+                }
             }
             
             // Clean slate: completely wipe any prior session data to prevent session fixation or role pollution
@@ -44,15 +64,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Strict role-based landing URL: Admin -> Dashboard, Cashier/Staff -> POS Terminal ALWAYS
             $redirectUrl = ($user['role'] === 'admin') ? url('/dashboard/index.php') : url('/pos/index.php');
             
-            sendJSON([
-                'success' => true, 
-                'message' => 'Login successful.',
-                'role' => $user['role'],
-                'username' => $user['username'],
-                'redirect_url' => $redirectUrl
-            ]);
+            if ($wantsRedirect) {
+                header("Location: " . $redirectUrl);
+                exit;
+            } else {
+                sendJSON([
+                    'success' => true, 
+                    'message' => 'Login successful.',
+                    'role' => $user['role'],
+                    'username' => $user['username'],
+                    'redirect_url' => $redirectUrl
+                ]);
+            }
         } else {
-            sendJSON(['success' => false, 'message' => 'Invalid username or password.'], 401);
+            $errorMsg = 'Invalid username or password.';
+            if ($wantsRedirect) {
+                redirect('/auth/login.php?error=' . urlencode($errorMsg));
+            } else {
+                sendJSON(['success' => false, 'message' => $errorMsg], 401);
+            }
         }
     }
     

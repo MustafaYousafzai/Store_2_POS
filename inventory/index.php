@@ -856,7 +856,7 @@ $(document).ready(function() {
             <html>
             <head>
                 <title>Print Barcodes - ${barcodePrintName}</title>
-                <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"><\/script>
+                <script src="${window.BASE_URL}/assets/vendor/jsbarcode/JsBarcode.all.min.js"><\/script>
                 <style>
                     @page {
                         size: 50mm 25mm;

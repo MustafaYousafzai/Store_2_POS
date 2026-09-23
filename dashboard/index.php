@@ -728,8 +728,8 @@ body {
     </div>
 </div>
 
-<!-- Chart.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Chart.js (Offline First) -->
+<script src="<?= url('/assets/vendor/chartjs/chart.umd.min.js') ?>"></script>
 
 <script>
 $(document).ready(function() {

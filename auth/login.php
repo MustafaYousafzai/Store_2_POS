@@ -26,14 +26,12 @@ if (isLoggedIn()) {
     <link rel="icon" type="image/png" href="<?= logoUrl() ?>">
     <link rel="shortcut icon" type="image/png" href="<?= logoUrl() ?>">
     <link rel="apple-touch-icon" href="<?= logoUrl() ?>">
-    <!-- Google Font Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Inter Font (Offline First) -->
+    <link href="<?= url('/assets/vendor/inter/inter.css') ?>" rel="stylesheet">
+    <!-- Font Awesome (Offline First) -->
+    <link href="<?= url('/assets/vendor/fontawesome/css/all.min.css') ?>" rel="stylesheet">
+    <!-- Bootstrap 5 CSS (Offline First) -->
+    <link href="<?= url('/assets/vendor/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet">
     <style>
         body {
             background: radial-gradient(circle at 10% 15%, #1e1b4b 0%, transparent 45%),
@@ -216,9 +214,13 @@ if (isLoggedIn()) {
         <p><?= defined('STORE_TAGLINE') ? STORE_TAGLINE : 'Retail Inventory & POS System' ?></p>
     </div>
     
-    <div id="errorAlert" class="alert alert-danger d-none" role="alert"></div>
+    <?php if (isset($_GET['error']) && !empty($_GET['error'])): ?>
+        <div id="errorAlert" class="alert alert-danger" role="alert"><?= sanitize($_GET['error']) ?></div>
+    <?php else: ?>
+        <div id="errorAlert" class="alert alert-danger d-none" role="alert"></div>
+    <?php endif; ?>
     
-    <form id="loginForm">
+    <form id="loginForm" method="POST" action="<?= url('/api/auth.php?action=login&redirect=1') ?>">
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input type="text" class="form-control" id="username" name="username" required autocomplete="username" placeholder="Enter username">
@@ -236,94 +238,130 @@ if (isLoggedIn()) {
     </form>
 </div>
 
-<!-- jQuery (Load via CDN) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Bootstrap 5 JS Bundle -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Local Vendor Libraries (Offline First - Zero External Network Reliance) -->
+<script src="<?= url('/assets/vendor/jquery/jquery-3.6.0.min.js') ?>"></script>
+<script src="<?= url('/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 
 <script>
-$(document).ready(function() {
-    // Dual Theme Engine for Login
-    window.applyTheme = function(theme) {
-        if (!theme || (theme !== 'dark' && theme !== 'light')) {
-            theme = localStorage.getItem('pos_theme') || 'dark';
-        }
-        localStorage.setItem('pos_theme', theme);
-        document.documentElement.setAttribute('data-bs-theme', theme);
-        
-        if (theme === 'light') {
-            $('html, body').removeClass('dark-theme').addClass('light-theme');
-            $('.theme-icon-sun').addClass('d-none');
-            $('.theme-icon-moon').removeClass('d-none');
-            $('#themeToggleBtn').attr('title', 'Switch to Dark Mode');
-            $('.theme-text').text('Light');
-        } else {
-            $('html, body').removeClass('light-theme').addClass('dark-theme');
-            $('.theme-icon-moon').addClass('d-none');
-            $('.theme-icon-sun').removeClass('d-none');
-            $('#themeToggleBtn').attr('title', 'Switch to Light Mode');
-            $('.theme-text').text('Dark');
-        }
-    };
+// Zero-Dependency Dual Theme Engine
+function applyTheme(theme) {
+    if (!theme || (theme !== 'dark' && theme !== 'light')) {
+        theme = localStorage.getItem('pos_theme') || 'dark';
+    }
+    localStorage.setItem('pos_theme', theme);
+    document.documentElement.setAttribute('data-bs-theme', theme);
+    
+    var body = document.body;
+    if (theme === 'light') {
+        body.classList.remove('dark-theme');
+        body.classList.add('light-theme');
+        document.querySelectorAll('.theme-icon-sun').forEach(function(el) { el.classList.add('d-none'); });
+        document.querySelectorAll('.theme-icon-moon').forEach(function(el) { el.classList.remove('d-none'); });
+        var toggleBtn = document.getElementById('themeToggleBtn');
+        if (toggleBtn) toggleBtn.setAttribute('title', 'Switch to Dark Mode');
+        document.querySelectorAll('.theme-text').forEach(function(el) { el.textContent = 'Light'; });
+    } else {
+        body.classList.remove('light-theme');
+        body.classList.add('dark-theme');
+        document.querySelectorAll('.theme-icon-moon').forEach(function(el) { el.classList.add('d-none'); });
+        document.querySelectorAll('.theme-icon-sun').forEach(function(el) { el.classList.remove('d-none'); });
+        var toggleBtn = document.getElementById('themeToggleBtn');
+        if (toggleBtn) toggleBtn.setAttribute('title', 'Switch to Light Mode');
+        document.querySelectorAll('.theme-text').forEach(function(el) { el.textContent = 'Dark'; });
+    }
+}
+window.applyTheme = applyTheme;
 
-    const savedTheme = localStorage.getItem('pos_theme') || 'dark';
-    window.applyTheme(savedTheme);
+// Apply saved theme immediately
+applyTheme(localStorage.getItem('pos_theme') || 'dark');
 
-    $(document).on('click', '#themeToggleBtn', function(e) {
-        e.preventDefault();
-        const current = localStorage.getItem('pos_theme') || 'dark';
-        const target = current === 'dark' ? 'light' : 'dark';
-        window.applyTheme(target);
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    var toggleBtn = document.getElementById('themeToggleBtn');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            var current = localStorage.getItem('pos_theme') || 'dark';
+            var target = current === 'dark' ? 'light' : 'dark';
+            applyTheme(target);
+        });
+    }
 
     window.addEventListener('storage', function(e) {
         if (e.key === 'pos_theme' && e.newValue) {
-            window.applyTheme(e.newValue);
+            applyTheme(e.newValue);
         }
     });
 
-    $('#loginForm').on('submit', function(e) {
-        e.preventDefault();
-        
-        const username = $('#username').val();
-        const password = $('#password').val();
-        
-        // UI feedback states
-        $('#errorAlert').addClass('d-none');
-        $('#btnText').addClass('d-none');
-        $('#btnSpinner').removeClass('d-none');
-        $('#loginBtn').prop('disabled', true);
-        
-        $.ajax({
-            url: '<?= url('/api/auth.php?action=login') ?>',
-            type: 'POST',
-            data: {
-                username: username,
-                password: password
-            },
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    window.location.href = response.redirect_url || '<?= url('/pos/index.php') ?>';
-                } else {
-                    showError(response.message || 'An error occurred.');
-                }
-            },
-            error: function(xhr) {
-                let msg = 'Failed to connect to the server.';
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                    msg = xhr.responseJSON.message;
-                }
-                showError(msg);
-            }
-        });
-    });
-    
+    var loginForm = document.getElementById('loginForm');
+    var errorAlert = document.getElementById('errorAlert');
+    var btnText = document.getElementById('btnText');
+    var btnSpinner = document.getElementById('btnSpinner');
+    var loginBtn = document.getElementById('loginBtn');
+
     function showError(message) {
-        $('#errorAlert').text(message).removeClass('d-none');
-        $('#btnText').removeClass('d-none');
-        $('#btnSpinner').addClass('d-none');
-        $('#loginBtn').prop('disabled', false);
+        if (errorAlert) {
+            errorAlert.textContent = message;
+            errorAlert.classList.remove('d-none');
+        }
+        if (btnText) btnText.classList.remove('d-none');
+        if (btnSpinner) btnSpinner.classList.add('d-none');
+        if (loginBtn) loginBtn.disabled = false;
+    }
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var usernameInput = document.getElementById('username');
+            var passwordInput = document.getElementById('password');
+            var username = usernameInput ? usernameInput.value.trim() : '';
+            var password = passwordInput ? passwordInput.value : '';
+
+            if (!username || !password) {
+                showError('Please enter both username and password.');
+                return;
+            }
+
+            // Visual loading state
+            if (errorAlert) errorAlert.classList.add('d-none');
+            if (btnText) btnText.classList.add('d-none');
+            if (btnSpinner) btnSpinner.classList.remove('d-none');
+            if (loginBtn) loginBtn.disabled = true;
+
+            var postData = new URLSearchParams();
+            postData.append('username', username);
+            postData.append('password', password);
+            postData.append('ajax', '1');
+
+            fetch('<?= url('/api/auth.php?action=login') ?>', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: postData.toString()
+            })
+            .then(function(res) {
+                return res.json().then(function(data) {
+                    return { status: res.status, ok: res.ok, data: data };
+                }).catch(function() {
+                    return { status: res.status, ok: false, data: { message: 'Unexpected server response.' } };
+                });
+            })
+            .then(function(result) {
+                if (result.ok && result.data && result.data.success) {
+                    window.location.href = result.data.redirect_url || '<?= url('/pos/index.php') ?>';
+                } else {
+                    showError((result.data && result.data.message) ? result.data.message : 'Invalid credentials.');
+                }
+            })
+            .catch(function(err) {
+                console.warn('AJAX fetch failed, falling back to native form POST:', err);
+                // Resilient fallback: submit form natively so user is never locked out
+                loginForm.submit();
+            });
+        });
     }
 });
 </script>

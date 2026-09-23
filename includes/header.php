@@ -20,14 +20,12 @@ requireLogin();
     <link rel="icon" type="image/png" href="<?= logoUrl() ?>">
     <link rel="shortcut icon" type="image/png" href="<?= logoUrl() ?>">
     <link rel="apple-touch-icon" href="<?= logoUrl() ?>">
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Google Font Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Inter Font (Offline First) -->
+    <link href="<?= url('/assets/vendor/inter/inter.css') ?>" rel="stylesheet">
+    <!-- Bootstrap 5 CSS (Offline First) -->
+    <link href="<?= url('/assets/vendor/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet">
+    <!-- Font Awesome (Offline First) -->
+    <link href="<?= url('/assets/vendor/fontawesome/css/all.min.css') ?>" rel="stylesheet">
     <!-- Custom Style -->
     <link href="<?= asset('/assets/css/style.css') ?>?v=<?= filemtime(__DIR__ . '/../assets/css/style.css') ?>" rel="stylesheet">
     <!-- Global Base URL & Store Config for AJAX/Fetch across entire frontend -->
@@ -40,10 +38,10 @@ requireLogin();
         window.STORE_CURRENCY = '<?= addslashes(defined('STORE_CURRENCY') ? STORE_CURRENCY : 'Rs.') ?>';
         window.STORE_LOGO = '<?= defined('STORE_LOGO') ? addslashes(STORE_LOGO) : 'one_dollar_shop_logo.png' ?>';
     </script>
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- JsBarcode (Standard Barcode Renderer) -->
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <!-- jQuery (Offline First) -->
+    <script src="<?= url('/assets/vendor/jquery/jquery-3.6.0.min.js') ?>"></script>
+    <!-- JsBarcode (Standard Barcode Renderer - Offline First) -->
+    <script src="<?= url('/assets/vendor/jsbarcode/JsBarcode.all.min.js') ?>"></script>
 </head>
 <body class="dark-theme">
 <script>
