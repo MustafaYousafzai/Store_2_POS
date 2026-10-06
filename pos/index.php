@@ -158,7 +158,7 @@ requirePermission('CREATE_SALE');
                                         <th>Item</th>
                                         <th class="text-end" style="width: 90px;">Rate (Rs.)</th>
                                         <th class="text-center" style="width: 120px;">Qty</th>
-                                        <th class="text-end" style="width: 75px;">Disc.</th>
+                                        <th class="text-end" style="width: 82px;" title="Discount per piece (Rs.)">Disc./pc</th>
                                         <th class="text-end" style="width: 95px;">Total</th>
                                         <th style="width: 35px;"></th>
                                     </tr>

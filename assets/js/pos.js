@@ -331,6 +331,9 @@ $(document).ready(function() {
                 return false;
             }
             existing.quantity += 1;
+            if (existing.unit_discount > 0) {
+                existing.discount = existing.quantity * existing.unit_discount;
+            }
             // Elevate the scanned item to the TOP of the cart for instant visual focus
             if (existingIndex > 0) {
                 const [movedItem] = cart.splice(existingIndex, 1);
@@ -348,6 +351,7 @@ $(document).ready(function() {
                 barcode: product.barcode,
                 selling_price: parseFloat(product.selling_price),
                 quantity: 1,
+                unit_discount: 0.00,
                 discount: 0.00,
                 stock_qty: product.stock_qty
             });
@@ -397,6 +401,7 @@ $(document).ready(function() {
         cart.forEach((item, index) => {
             const itemNet = (item.quantity * item.selling_price) - item.discount;
             const isHighlight = (highlightProductId && item.product_id == highlightProductId);
+            const unitDisc = parseFloat(item.unit_discount || 0);
             
             html += `
                 <tr data-index="${index}" data-product-id="${item.product_id}" class="${isHighlight ? 'table-success scan-highlight cart-row-new' : ''}">
@@ -414,8 +419,9 @@ $(document).ready(function() {
                             <button class="btn btn-outline-secondary btn-qty-plus py-0 px-2" type="button" style="height: 28px; line-height: 1;"><i class="fas fa-plus small"></i></button>
                         </div>
                     </td>
-                    <td class="text-end">
-                        <input type="number" class="form-control form-control-sm text-end cart-item-discount-input font-monospace py-0 px-1" value="${item.discount}" min="0" step="0.01" style="max-width: 70px; height: 26px; margin-left: auto;">
+                    <td class="text-end position-relative">
+                        <input type="number" class="form-control form-control-sm text-end cart-item-discount-input font-monospace py-0 px-1" value="${unitDisc > 0 ? unitDisc.toFixed(2) : ''}" placeholder="0.00" min="0" max="${item.selling_price}" step="0.5" style="max-width: 75px; height: 26px; margin-left: auto;" title="Discount per piece (Rs.)">
+                        ${item.quantity > 1 && unitDisc > 0 ? `<div class="cart-item-sub-disc text-warning font-monospace fw-bold" style="font-size: 0.72rem; line-height: 1.1;" title="Total discount on ${item.quantity} units">-Rs. ${(item.quantity * unitDisc).toFixed(2)}</div>` : ''}
                     </td>
                     <td class="text-end font-monospace fw-bold">Rs. ${itemNet.toFixed(2)}</td>
                     <td class="text-center">
@@ -479,19 +485,27 @@ $(document).ready(function() {
     $(document).on('click', '.btn-qty-plus', function() {
         const index = $(this).closest('tr').data('index');
         const item = cart[index];
+        if (!item) return;
         if (item.quantity + 1 > item.stock_qty) {
             showToast(`Insufficient stock! Max available is ${item.stock_qty}`, 'warning');
             return;
         }
         item.quantity += 1;
+        if (item.unit_discount > 0) {
+            item.discount = item.quantity * item.unit_discount;
+        }
         renderCart();
     });
     
     $(document).on('click', '.btn-qty-minus', function() {
         const index = $(this).closest('tr').data('index');
         const item = cart[index];
+        if (!item) return;
         if (item.quantity > 1) {
             item.quantity -= 1;
+            if (item.unit_discount > 0) {
+                item.discount = item.quantity * item.unit_discount;
+            }
         } else {
             cart.splice(index, 1);
         }
@@ -501,6 +515,7 @@ $(document).ready(function() {
     $(document).on('change', '.cart-qty-input', function() {
         const index = $(this).closest('tr').data('index');
         const item = cart[index];
+        if (!item) return;
         const val = parseInt($(this).val()) || 0;
         
         if (val < 1) {
@@ -511,24 +526,67 @@ $(document).ready(function() {
         } else {
             item.quantity = val;
         }
+        if (item.unit_discount > 0) {
+            item.discount = item.quantity * item.unit_discount;
+        }
         renderCart();
     });
 
-    // Discount edit events
+    // Discount edit events (Per-Piece Discount Engine)
+    $(document).on('input', '.cart-item-discount-input', function() {
+        const $row = $(this).closest('tr');
+        const index = $row.data('index');
+        const item = cart[index];
+        if (!item) return;
+
+        let unitDiscVal = parseFloat($(this).val()) || 0.00;
+        const maxUnitDisc = item.selling_price;
+
+        if (unitDiscVal < 0) {
+            unitDiscVal = 0.00;
+        } else if (unitDiscVal > maxUnitDisc) {
+            unitDiscVal = maxUnitDisc;
+        }
+
+        item.unit_discount = unitDiscVal;
+        item.discount = item.quantity * unitDiscVal;
+
+        // Dynamically update row total text without tearing down DOM focus
+        const itemNet = (item.quantity * item.selling_price) - item.discount;
+        $row.find('td:nth-child(5)').text(`Rs. ${itemNet.toFixed(2)}`);
+
+        // Update or toggle per-piece total badge
+        let $subBadge = $row.find('.cart-item-sub-disc');
+        if (item.quantity > 1 && unitDiscVal > 0) {
+            if (!$subBadge.length) {
+                $(this).after(`<div class="cart-item-sub-disc text-warning font-monospace fw-bold" style="font-size: 0.72rem; line-height: 1.1;" title="Total discount on ${item.quantity} units">-Rs. ${(item.quantity * unitDiscVal).toFixed(2)}</div>`);
+            } else {
+                $subBadge.text(`-Rs. ${(item.quantity * unitDiscVal).toFixed(2)}`);
+            }
+        } else {
+            $subBadge.remove();
+        }
+
+        calculateTotals();
+    });
+
     $(document).on('change', '.cart-item-discount-input', function() {
         const index = $(this).closest('tr').data('index');
         const item = cart[index];
-        const discountVal = parseFloat($(this).val()) || 0.00;
-        const maxVal = item.quantity * item.selling_price;
-        
-        if (discountVal < 0) {
-            item.discount = 0.00;
-        } else if (discountVal > maxVal) {
-            showToast("Item discount cannot exceed item total price!", 'danger');
-            item.discount = maxVal;
-        } else {
-            item.discount = discountVal;
+        if (!item) return;
+
+        let unitDiscVal = parseFloat($(this).val()) || 0.00;
+        const maxUnitDisc = item.selling_price;
+
+        if (unitDiscVal < 0) {
+            unitDiscVal = 0.00;
+        } else if (unitDiscVal > maxUnitDisc) {
+            showToast(`Discount per piece cannot exceed item selling rate (Rs. ${maxUnitDisc.toFixed(2)})!`, 'warning');
+            unitDiscVal = maxUnitDisc;
         }
+
+        item.unit_discount = unitDiscVal;
+        item.discount = item.quantity * unitDiscVal;
         renderCart();
     });
 
@@ -536,6 +594,7 @@ $(document).ready(function() {
     $(document).on('change', '.cart-item-price-input', function() {
         const index = $(this).closest('tr').data('index');
         const item = cart[index];
+        if (!item) return;
         const newPrice = parseFloat($(this).val());
         if (isNaN(newPrice) || newPrice < 0) {
             showToast("Invalid price entered!", 'danger');
@@ -543,6 +602,10 @@ $(document).ready(function() {
             return;
         }
         item.selling_price = newPrice;
+        if (item.unit_discount > newPrice) {
+            item.unit_discount = newPrice;
+        }
+        item.discount = item.quantity * (item.unit_discount || 0);
         renderCart();
     });
 
@@ -856,6 +919,7 @@ $(document).ready(function() {
                         barcode: item.barcode,
                         selling_price: parseFloat(item.selling_price),
                         quantity: parseInt(item.quantity),
+                        unit_discount: 0.00,
                         discount: 0.00,
                         stock_qty: parseInt(item.stock_qty)
                     }));
@@ -944,6 +1008,7 @@ $(document).ready(function() {
                 product_id: item.product_id,
                 quantity: item.quantity,
                 unit_price: item.selling_price,
+                unit_discount: item.unit_discount || 0,
                 discount_override: item.discount
             })),
             discount: discount,
@@ -1058,6 +1123,7 @@ $(document).ready(function() {
         
         let itemRows = '';
         const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const totalItemDiscounts = cart.reduce((sum, item) => sum + item.discount, 0);
         
         cart.forEach((item, idx) => {
             const rowTotal = (item.quantity * item.selling_price) - item.discount;
@@ -1076,7 +1142,7 @@ $(document).ready(function() {
                 ${item.discount > 0 ? `
                 <tr>
                     <td colspan="4" class="right" style="font-size: 10px; font-weight: 800; color: #000; padding-bottom: 2px;">
-                        Item Disc: -Rs. ${parseFloat(item.discount).toFixed(2)}
+                        Item Disc: -Rs. ${parseFloat(item.discount).toFixed(2)}${item.quantity > 1 && item.unit_discount > 0 ? ` (Rs. ${parseFloat(item.unit_discount).toFixed(2)}/pc)` : ''}
                     </td>
                 </tr>` : ''}
             `;
@@ -1127,6 +1193,11 @@ $(document).ready(function() {
                     <td style="font-weight: 800;">Subtotal:</td>
                     <td class="right" style="font-weight: 800;">Rs. ${subtotal.toFixed(2)}</td>
                 </tr>
+                ${totalItemDiscounts > 0 ? `
+                <tr>
+                    <td style="font-weight: 800;">Item Discounts:</td>
+                    <td class="right" style="font-weight: 900;">-Rs. ${totalItemDiscounts.toFixed(2)}</td>
+                </tr>` : ''}
                 ${invoiceDiscount > 0 ? `
                 <tr>
                     <td style="font-weight: 800;">Bill Discount:</td>

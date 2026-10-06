@@ -227,6 +227,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             
             $subtotal = 0.00;
+            $totalItemDiscounts = 0.00;
             $sale_items_data = [];
             
             // 2. Loop and validate stock + custom special pricing
@@ -261,7 +262,24 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ? (float)$cartItem['unit_price'] 
                     : (float)$product['selling_price'];
                     
-                $itemDiscount = isset($cartItem['discount_override']) ? (float)$cartItem['discount_override'] : 0.00;
+                // Support Line Item Discount (Per-Piece Unit Discount or Total Row Discount)
+                if (isset($cartItem['unit_discount']) && (float)$cartItem['unit_discount'] > 0) {
+                    $unitDiscount = (float)$cartItem['unit_discount'];
+                    if ($unitDiscount > $unitPrice) {
+                        $unitDiscount = $unitPrice;
+                    }
+                    $itemDiscount = round($reqQty * $unitDiscount, 2);
+                } else if (isset($cartItem['discount_override']) && (float)$cartItem['discount_override'] > 0) {
+                    $itemDiscount = (float)$cartItem['discount_override'];
+                } else {
+                    $itemDiscount = 0.00;
+                }
+
+                $maxItemDiscount = $reqQty * $unitPrice;
+                if ($itemDiscount > $maxItemDiscount) {
+                    $itemDiscount = $maxItemDiscount;
+                }
+                
                 $netAmount = ($reqQty * $unitPrice) - $itemDiscount;
                 
                 if ($netAmount < 0) {
@@ -269,6 +287,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 
                 $subtotal += ($reqQty * $unitPrice);
+                $totalItemDiscounts += $itemDiscount;
                 
                 $sale_items_data[] = [
                     'product_id' => $pid,
@@ -282,8 +301,13 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ];
             }
             
-            // 3. Calculate final totals
-            $total = max(0.00, $subtotal - $discount);
+            // 3. Calculate final totals (Deduct both item-level discounts and overall bill discount override)
+            $billDiscount = $discount;
+            $combinedTotalDiscount = $totalItemDiscounts + $billDiscount;
+            if ($combinedTotalDiscount > $subtotal) {
+                $combinedTotalDiscount = $subtotal;
+            }
+            $total = max(0.00, $subtotal - $combinedTotalDiscount);
             
             // Khata Credit Limit and Down Payment Check
             $netChargeToKhata = $total;
@@ -331,7 +355,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $insSale->execute([
                 $billNumber,
                 $subtotal,
-                $discount,
+                $combinedTotalDiscount,
                 $total,
                 $paidForSale,
                 $change,
@@ -355,7 +379,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             
             // 7. Allocate overall bill discount pro-rata across items
-            $overallDiscountLeft = $discount;
+            $overallDiscountLeft = $billDiscount;
             $itemsCount = count($sale_items_data);
             
             $insItem = $db->prepare("
@@ -372,12 +396,12 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $item = &$sale_items_data[$i];
                 
                 $allocatedBillDiscount = 0.00;
-                if ($subtotal > 0 && $discount > 0) {
+                if ($subtotal > 0 && $billDiscount > 0) {
                     if ($i === $itemsCount - 1) {
                         $allocatedBillDiscount = $overallDiscountLeft;
                     } else {
                         $share = (($item['quantity'] * $item['unit_price']) / $subtotal);
-                        $allocatedBillDiscount = round($discount * $share, 2);
+                        $allocatedBillDiscount = round($billDiscount * $share, 2);
                         $overallDiscountLeft -= $allocatedBillDiscount;
                     }
                 }
