@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $search = isset($_GET['search']) ? trim(sanitize($_GET['search'])) : '';
         $category_id = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
         $status = isset($_GET['status']) ? sanitize($_GET['status']) : '';
+        $show_in_pos = (isset($_GET['show_in_pos']) && $_GET['show_in_pos'] !== '') ? (int)$_GET['show_in_pos'] : null;
         $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 50;
         $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
         
@@ -44,6 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $where[] = "p.status = ?";
             $params[] = $status;
         }
+
+        if ($show_in_pos !== null) {
+            $where[] = "p.show_in_pos = ?";
+            $params[] = $show_in_pos;
+        }
         
         $whereClause = implode(" AND ", $where);
         
@@ -52,14 +58,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $countStmt->execute($params);
         $total = $countStmt->fetchColumn();
         
+        // Determine ordering and limit clause
+        if ($limit <= 0) {
+            // Full catalog fetch (e.g. POS terminal initialization) - alphabetical ordering with no artificial truncation
+            $orderBy = "ORDER BY p.name ASC, p.id DESC";
+            $limitClause = "";
+        } else {
+            // Standard paginated fetch (e.g. Inventory management table)
+            $orderBy = "ORDER BY p.id DESC";
+            $limitClause = "LIMIT $limit OFFSET $offset";
+        }
+
         // Get records
         $query = "
             SELECT p.*, c.name as category_name 
             FROM products p
             LEFT JOIN categories c ON p.category_id = c.id
             WHERE $whereClause
-            ORDER BY p.id DESC
-            LIMIT $limit OFFSET $offset
+            $orderBy
+            $limitClause
         ";
         
         $stmt = $db->prepare($query);

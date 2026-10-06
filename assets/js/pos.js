@@ -71,16 +71,15 @@ $(document).ready(function() {
         }
     }
 
-    // Load Product Catalog on Load
+    // Load Product Catalog on Load (All active products visible in POS)
     function loadCatalog() {
         $.ajax({
-            url: BASE_URL + '/api/products.php?action=list&limit=1000&status=active',
+            url: BASE_URL + '/api/products.php?action=list&limit=0&status=active&show_in_pos=1',
             type: 'GET',
             dataType: 'json',
             success: function(response) {
-                if (response.success) {
-                    // Filter to products visible in POS
-                    catalogProducts = response.products.filter(p => p.show_in_pos == 1);
+                if (response.success && response.products) {
+                    catalogProducts = response.products;
                     renderCatalog(catalogProducts);
                 }
             }
@@ -124,19 +123,42 @@ $(document).ready(function() {
     // Init catalog
     loadCatalog();
     
-    // Filter/Search product catalog locally
+    // Filter/Search product catalog locally with debounced server fallback
+    let catalogSearchDebounce = null;
     $('#catalogSearchInput').on('input', function() {
         const query = $(this).val().toLowerCase().trim();
         if (query === '') {
             renderCatalog(catalogProducts);
         } else {
             const filtered = catalogProducts.filter(p => {
-                const nameMatch = p.name.toLowerCase().includes(query);
-                const barcodeMatch = p.barcode.toLowerCase().includes(query);
+                const nameMatch = p.name ? p.name.toLowerCase().includes(query) : false;
+                const barcodeMatch = p.barcode ? p.barcode.toLowerCase().includes(query) : false;
                 const catMatch = p.category_name ? p.category_name.toLowerCase().includes(query) : false;
                 return nameMatch || barcodeMatch || catMatch;
             });
-            renderCatalog(filtered);
+            if (filtered.length > 0) {
+                renderCatalog(filtered);
+            } else {
+                renderCatalog([]);
+                clearTimeout(catalogSearchDebounce);
+                catalogSearchDebounce = setTimeout(() => {
+                    $.ajax({
+                        url: `${BASE_URL}/api/products.php?action=list&search=${encodeURIComponent(query)}&limit=50&status=active&show_in_pos=1`,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res.success && res.products && res.products.length > 0) {
+                                res.products.forEach(p => {
+                                    if (!catalogProducts.some(cp => cp.id == p.id)) {
+                                        catalogProducts.push(p);
+                                    }
+                                });
+                                renderCatalog(res.products);
+                            }
+                        }
+                    });
+                }, 300);
+            }
         }
     });
 
@@ -163,7 +185,12 @@ $(document).ready(function() {
         $('#mainSearchResultsPanel, #modalSearchResultsPanel').addClass('d-none');
 
         // STEP 1: FAST PATH - Search in-memory catalog cache (0ms instant lookup)
-        const matched = catalogProducts.find(p => p.barcode === query);
+        const qLower = query.toLowerCase();
+        let matched = catalogProducts.find(p => p.barcode === query || (p.barcode && p.barcode.toLowerCase() === qLower));
+        if (!matched) {
+            // Case-insensitive exact name match in memory cache
+            matched = catalogProducts.find(p => p.name && p.name.toLowerCase() === qLower);
+        }
         if (matched) {
             const added = addToCart({
                 product_id: matched.id,
@@ -192,6 +219,7 @@ $(document).ready(function() {
                     // Cache it for future zero-delay scans
                     if (!catalogProducts.some(p => p.id == prod.id)) {
                         catalogProducts.push(prod);
+                        renderCatalog(catalogProducts);
                     }
                     const added = addToCart({
                         product_id: prod.id,
@@ -207,9 +235,45 @@ $(document).ready(function() {
                     }
                     if (callback) callback(added);
                 } else {
-                    playScanSound(false);
-                    showToast(`Barcode "${query}" not found or inactive in POS!`, 'warning');
-                    if (callback) callback(false);
+                    // Try name/search query via list API
+                    $.ajax({
+                        url: `${BASE_URL}/api/products.php?action=list&search=${encodeURIComponent(query)}&limit=10&status=active&show_in_pos=1`,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(searchRes) {
+                            if (searchRes.success && searchRes.products && searchRes.products.length > 0) {
+                                searchRes.products.forEach(p => {
+                                    if (!catalogProducts.some(cp => cp.id == p.id)) {
+                                        catalogProducts.push(p);
+                                    }
+                                });
+                                renderCatalog(catalogProducts);
+
+                                if (searchRes.products.length === 1) {
+                                    const single = searchRes.products[0];
+                                    const added = addToCart({
+                                        product_id: single.id,
+                                        name: single.name,
+                                        barcode: single.barcode,
+                                        selling_price: single.selling_price,
+                                        stock_qty: single.quantity
+                                    });
+                                    if (added) playScanSound(true);
+                                    else playScanSound(false);
+                                    if (callback) callback(added);
+                                    return;
+                                }
+                            }
+                            playScanSound(false);
+                            showToast(`Barcode or Product "${query}" not found or inactive in POS!`, 'warning');
+                            if (callback) callback(false);
+                        },
+                        error: function() {
+                            playScanSound(false);
+                            showToast(`Barcode "${query}" not found or inactive in POS!`, 'warning');
+                            if (callback) callback(false);
+                        }
+                    });
                 }
             },
             error: function() {
@@ -1123,7 +1187,33 @@ $(document).ready(function() {
         }
     }
 
+    // Autocomplete Search Results Card Renderer
+    function renderSearchResultsHTML(products, itemClass) {
+        let html = '';
+        products.forEach(p => {
+            html += `
+                <button type="button" class="list-group-item list-group-item-action ${itemClass} d-flex justify-content-between align-items-center py-2 text-start"
+                    data-id="${p.id}"
+                    data-name="${p.name}"
+                    data-barcode="${p.barcode}"
+                    data-price="${p.selling_price}"
+                    data-stock="${p.quantity}">
+                    <div>
+                        <strong class="text-dark">${p.name}</strong><br>
+                        <small class="text-muted">Barcode: <code>${p.barcode}</code></small>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-danger">Rs. ${parseFloat(p.selling_price).toFixed(2)}</span><br>
+                        <small class="text-muted">Stock: ${p.quantity}</small>
+                    </div>
+                </button>
+            `;
+        });
+        return html;
+    }
+
     // Live Autocomplete Search inside Modal
+    let modalSearchDebounce = null;
     $('#modalCartSearchInput').on('input', function() {
         const query = $(this).val().toLowerCase().trim();
         if (query.length === 0) {
@@ -1133,38 +1223,43 @@ $(document).ready(function() {
         
         // Filter catalog cache locally
         const matches = catalogProducts.filter(p => {
-            const nameMatch = p.name.toLowerCase().includes(query);
-            const barcodeMatch = p.barcode.toLowerCase().includes(query);
+            const nameMatch = p.name ? p.name.toLowerCase().includes(query) : false;
+            const barcodeMatch = p.barcode ? p.barcode.toLowerCase().includes(query) : false;
             const catMatch = p.category_name ? p.category_name.toLowerCase().includes(query) : false;
             return nameMatch || barcodeMatch || catMatch;
         });
         
         if (matches.length > 0) {
-            let html = '';
-            matches.forEach(p => {
-                html += `
-                    <button type="button" class="list-group-item list-group-item-action modal-search-result-item d-flex justify-content-between align-items-center py-2 text-start"
-                        data-id="${p.id}"
-                        data-name="${p.name}"
-                        data-barcode="${p.barcode}"
-                        data-price="${p.selling_price}"
-                        data-stock="${p.quantity}">
-                        <div>
-                            <strong class="text-dark">${p.name}</strong><br>
-                            <small class="text-muted">Barcode: <code>${p.barcode}</code></small>
-                        </div>
-                        <div class="text-end">
-                            <span class="badge bg-danger">Rs. ${parseFloat(p.selling_price).toFixed(2)}</span><br>
-                            <small class="text-muted">Stock: ${p.quantity}</small>
-                        </div>
-                    </button>
-                `;
-            });
-            $('#modalSearchResultsList').html(html);
+            $('#modalSearchResultsList').html(renderSearchResultsHTML(matches.slice(0, 20), 'modal-search-result-item'));
             $('#modalSearchResultsPanel').removeClass('d-none');
         } else {
-            $('#modalSearchResultsList').html('<div class="p-3 text-center text-muted">No matching items found.</div>');
+            $('#modalSearchResultsList').html('<div class="p-3 text-center text-muted"><i class="fas fa-spinner fa-spin me-2"></i>Searching server...</div>');
             $('#modalSearchResultsPanel').removeClass('d-none');
+
+            clearTimeout(modalSearchDebounce);
+            modalSearchDebounce = setTimeout(() => {
+                $.ajax({
+                    url: `${BASE_URL}/api/products.php?action=list&search=${encodeURIComponent(query)}&limit=15&status=active&show_in_pos=1`,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.success && res.products && res.products.length > 0) {
+                            res.products.forEach(p => {
+                                if (!catalogProducts.some(cp => cp.id == p.id)) {
+                                    catalogProducts.push(p);
+                                }
+                            });
+                            renderCatalog(catalogProducts);
+                            $('#modalSearchResultsList').html(renderSearchResultsHTML(res.products, 'modal-search-result-item'));
+                        } else {
+                            $('#modalSearchResultsList').html('<div class="p-3 text-center text-muted">No matching items found.</div>');
+                        }
+                    },
+                    error: function() {
+                        $('#modalSearchResultsList').html('<div class="p-3 text-center text-muted">No matching items found.</div>');
+                    }
+                });
+            }, 300);
         }
     });
 
@@ -1194,6 +1289,7 @@ $(document).ready(function() {
     });
 
     // Live Autocomplete Search on Main Screen
+    let mainSearchDebounce = null;
     $('#posSearchInput').on('input', function() {
         const query = $(this).val().toLowerCase().trim();
         if (query.length === 0) {
@@ -1203,38 +1299,43 @@ $(document).ready(function() {
         
         // Filter catalog cache locally
         const matches = catalogProducts.filter(p => {
-            const nameMatch = p.name.toLowerCase().includes(query);
-            const barcodeMatch = p.barcode.toLowerCase().includes(query);
+            const nameMatch = p.name ? p.name.toLowerCase().includes(query) : false;
+            const barcodeMatch = p.barcode ? p.barcode.toLowerCase().includes(query) : false;
             const catMatch = p.category_name ? p.category_name.toLowerCase().includes(query) : false;
             return nameMatch || barcodeMatch || catMatch;
         });
         
         if (matches.length > 0) {
-            let html = '';
-            matches.forEach(p => {
-                html += `
-                    <button type="button" class="list-group-item list-group-item-action main-search-result-item d-flex justify-content-between align-items-center py-2 text-start"
-                        data-id="${p.id}"
-                        data-name="${p.name}"
-                        data-barcode="${p.barcode}"
-                        data-price="${p.selling_price}"
-                        data-stock="${p.quantity}">
-                        <div>
-                            <strong class="text-dark">${p.name}</strong><br>
-                            <small class="text-muted">Barcode: <code>${p.barcode}</code></small>
-                        </div>
-                        <div class="text-end">
-                            <span class="badge bg-danger">Rs. ${parseFloat(p.selling_price).toFixed(2)}</span><br>
-                            <small class="text-muted">Stock: ${p.quantity}</small>
-                        </div>
-                    </button>
-                `;
-            });
-            $('#mainSearchResultsList').html(html);
+            $('#mainSearchResultsList').html(renderSearchResultsHTML(matches.slice(0, 20), 'main-search-result-item'));
             $('#mainSearchResultsPanel').removeClass('d-none');
         } else {
-            $('#mainSearchResultsList').html('<div class="p-3 text-center text-muted">No matching items found.</div>');
+            $('#mainSearchResultsList').html('<div class="p-3 text-center text-muted"><i class="fas fa-spinner fa-spin me-2"></i>Searching server...</div>');
             $('#mainSearchResultsPanel').removeClass('d-none');
+
+            clearTimeout(mainSearchDebounce);
+            mainSearchDebounce = setTimeout(() => {
+                $.ajax({
+                    url: `${BASE_URL}/api/products.php?action=list&search=${encodeURIComponent(query)}&limit=15&status=active&show_in_pos=1`,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.success && res.products && res.products.length > 0) {
+                            res.products.forEach(p => {
+                                if (!catalogProducts.some(cp => cp.id == p.id)) {
+                                    catalogProducts.push(p);
+                                }
+                            });
+                            renderCatalog(catalogProducts);
+                            $('#mainSearchResultsList').html(renderSearchResultsHTML(res.products, 'main-search-result-item'));
+                        } else {
+                            $('#mainSearchResultsList').html('<div class="p-3 text-center text-muted">No matching items found.</div>');
+                        }
+                    },
+                    error: function() {
+                        $('#mainSearchResultsList').html('<div class="p-3 text-center text-muted">No matching items found.</div>');
+                    }
+                });
+            }, 300);
         }
     });
 
